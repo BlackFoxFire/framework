@@ -3,7 +3,8 @@
     "description": "Petit framework php simple et lèger",
     "type": "library",
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "twig/twig": "^3.8"
     },
     "license": "MIT",
     "autoload": {
