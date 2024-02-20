@@ -1,0 +1,20 @@
+{
+    "name": "blackfox/mamba",
+    "description": "Petit framework php simple et lèger",
+    "type": "library",
+    "require": {
+        "php": "^8.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mamba\\": "src/Mamba/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Christophe Dufour",
+            "email": "blackfox@proximus.be"
+        }
+    ]
+}
