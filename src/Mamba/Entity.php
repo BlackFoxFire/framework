@@ -11,7 +11,7 @@
 
 namespace Mamba;
 
-use Mamba\Trait\Hydrator;
+use Mamba\Traits\Hydrator;
 
 abstract class Entity
 {

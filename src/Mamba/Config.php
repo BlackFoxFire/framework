@@ -11,7 +11,7 @@
 
 namespace Mamba;
 
-use Mamba\Trait\LoadXMLFile;
+use Mamba\Traits\LoadXMLFile;
 
 class Config
 {

@@ -9,7 +9,7 @@
 *
 */
 
-namespace Mamba\Trait;
+namespace Mamba\Traits;
 
 trait DigitTester
 {
