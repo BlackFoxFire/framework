@@ -41,20 +41,19 @@ class Link
 		}
 	}
 	
-	// Retourne un lien ou le tableau des liens
-	public static function get(string $key = null): mixed
+	// Retourne un lien du tableau des liens
+	public static function get(string $key): mixed
 	{
-		if(!is_null($key)) {
-			if(isset(self::$vars[$key])) {
-				return self::$vars[$key];
-			}
-		}
-		else {
-			if(!empty(self::$vars)) {
-				return self::$vars;
-			}
+		if(isset(self::$vars[$key])) {
+			return self::$vars[$key];
 		}
 		
 		return null;
+	}
+
+	// Retourne le tableau des liens
+	public static function getAll(): array
+	{
+		return self::$vars;
 	}
 }
