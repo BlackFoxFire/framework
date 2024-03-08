@@ -1,5 +1,5 @@
 #
 # .gitignore
 #
-/vendor/
-/src/Mamba/install
+vendor
+src/Mamba/install/files
