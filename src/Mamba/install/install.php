@@ -1,29 +1,67 @@
 <?php
 
-define("DS", DIRECTORY_SEPARATOR);
-define("ROOT", dirname(__DIR__));
-
 class MambaInstallation
 {
     private string $appName;
+    private string $rootDir;
+    private string $sourceFile;
     private string $appDir;
 
     //
-    public function __construct($appName, $appDir)
+    public function __construct($appName, $rootDir)
     {
         $this->appName = $appName;
-        $this->appDir = $appDir;
+        $this->rootDir = $rootDir;
+        $this->sourceFile = __DIR__ . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR;
+        $this->appDir = $rootDir . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR;
     }
 
     // 
     public function run()
     {
-        $this->createFolder();
+        $this->publicForder();
         // $this->createHtaccess();
     }
 
+    private function createFolder(array $folders, string $dir): void
+    {
+        foreach($folders as $folder) {
+            if(!file_exists($folder)) {
+                echo $folder . "\n";
+                mkdir($folder, 0777, true);
+            }
+        }
+    }
+
+    private function copyFile()
+    {
+
+    }
+
+    private function publicForder()
+    {
+        echo "Création du dossier public ... \n";
+
+        $folders = array(
+            'public_css' => "public" . DIRECTORY_SEPARATOR . "css",
+            'public_js' => "public" . DIRECTORY_SEPARATOR . "js",
+            'public_pictures' => "public" . DIRECTORY_SEPARATOR . "pictures"
+        );
+
+        $this->createFolder($folders, $this->rootDir);
+
+        $files = array(
+            'htaccess' => "htaccess2",
+            'app' => "app.php"
+        );
+
+        copy("files/htaccess2", $this->rootDir . "public" . DIRECTORY_SEPARATOR . ".htaccess");
+        copy($this->sourceFile . "app.php", $this->rootDir . "public" . DIRECTORY_SEPARATOR . "app.php");
+
+    }
+
     // 
-    private static function createFolder()
+    private static function createFolder2()
     {
         $folders = array(
             // Dossiers de l'application
@@ -41,19 +79,7 @@ class MambaInstallation
             // 'lib_functions' => "Lib" . DS . "Functions",
             // 'lib_modes' => "Lib" . DS . "Models",
             // Racines web
-            'public_css' => "public" . DIRECTORY_SEPARATOR . "css",
-            'public_js' => "public" . DIRECTORY_SEPARATOR . "js",
-            'public_pictures' => "public" . DIRECTORY_SEPARATOR . "pictures"
         );
-
-        echo "Créations des dossiers : \n";
-        
-        foreach($folders as $folder) {
-            if(!file_exists($folder)) {
-                echo $folder . "\n";
-                // mkdir($folder, 0777, true);
-            }
-        }
     }
 
     // 
@@ -104,12 +130,12 @@ class MambaInstallation
 }
 
 $appName = "src";
-$appDir = dirname(__DIR__, 3);
-$install = new MambaInstallation($appName, $appDir);
+$rootDir = dirname(__DIR__, 3);
 
-try{
+if(is_writable($rootDir)) {
+    $install = new MambaInstallation($appName, $rootDir);
     $install->run();
 }
-catch(\RuntimeException $e) {
-    throw new \RuntimeException($e->getMessage() . " " . $e->getFile() . " " . $e->getCode());
+else {
+    die("Impossible d'écrire dans le dossier $rootDir.");
 }
