@@ -19,31 +19,27 @@ trait DigitTester
 	*/
 	
 	// Retourne true si le chiffre à vérifier est bien un entier
-	public function isInt(mixed $value): int|false
+	public function isInt(string $value): int|false
 	{
 		$pattern = "#^[\s]*[-+]?[0-9]+[\s]*$#";
 	
 		return preg_match($pattern, $value);
 	}
-	
+
 	// Retourne true si une valeur est positive
-	public function intPos(mixed $value): bool
+	public function isPositive(int|float $value): bool
 	{
-		if($this->isInt($value) && (int)$value > 0) {
+		if($value > 0) {
 			return true;
 		}
-		
+
 		return false;
 	}
 	
 	// Retourne true si la valeur de l'entier $value est bien compris enter $min et $max inclut
-	public function isBetween(mixed $value, mixed $min, mixed $max): bool
+	public function isBetween(int|float $value, int|float $min, int|float $max): bool
 	{
-		if(!$this->isInt($value) || !$this->isInt($min) || !$this->isInt($max)) {
-			throw new \InvalidArgumentException("La fonction isBetween n'accepte que des nombres entier !");
-		}
-		
-		if(((int) $min <= (int) $value) && ((int) $value <= (int) $max)) {
+		if(($min <= $value) && ($value <= $max)) {
 			return true;
 		}
 		
