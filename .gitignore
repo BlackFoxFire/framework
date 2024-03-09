@@ -2,4 +2,4 @@
 # .gitignore
 #
 /vendor/
-/src/Mamba/install
+src/dev
