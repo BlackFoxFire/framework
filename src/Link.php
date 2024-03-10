@@ -36,7 +36,7 @@ class Link
 	public static function init(Application $app): void
 	{
 		if(empty(self::$vars)) {
-			self::$file = $app->appDir() . "config" . DIRECTORY_SEPARATOR . "link.xml";
+			self::$file = $app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "link.xml";
 			self::$vars = self::loadXmlFile(self::$file);
 		}
 	}

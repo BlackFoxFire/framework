@@ -35,7 +35,7 @@ class View extends ApplicationComponent
 	{
 		parent::__construct($application);
 		
-		$data[] = $this->app->appDir() . "html" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR;
+		$data[] = $this->app->rootDir() . DIRECTORY_SEPARATOR . "html" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR;
 		
 		if(!empty($controller)) {
 			if(is_string($controller)) {
@@ -47,7 +47,7 @@ class View extends ApplicationComponent
 			}
 		}
 		
-		$data[] = $this->app->appDir() . "html" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR;
+		$data[] = $this->app->rootDir() . DIRECTORY_SEPARATOR . "html" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR;
 		$this->path = $data;
 	}
 	

@@ -20,6 +20,8 @@ abstract class Application
 	*/
 	
 	// Dossier racine de l'application
+	protected string $rootDir;
+	// Dossier des sources php de l'application
 	protected string $appDir;
 	// Nom de l'application, du namespace et du dossier de l'application
 	protected string $appName;
@@ -36,8 +38,9 @@ abstract class Application
 		Constructeur
 		------------
 	*/
-	public function __construct(string $appDir, string $appName)
+	public function __construct(string $rootDir, string $appDir, string $appName)
 	{
+		$this->rootDir = $rootDir;
 		$this->appDir = $appDir;
 		$this->appName = $appName;
 		$this->httpRequest = new HTTPRequest($this);
@@ -54,6 +57,12 @@ abstract class Application
 	*/
 	
 	// Retourne l'objet $rootDir
+	public function rootDir(): string
+	{
+		return $this->rootDir;
+	}
+
+	// Retourne l'objet $appDir
 	public function appDir(): string
 	{
 		return $this->appDir;
