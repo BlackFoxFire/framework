@@ -9,6 +9,7 @@ Options Indexes FollowSymlinks
 	RewriteEngine On
 	
 	RewriteBase /
+	
 	RewriteRule ^admin/ app.php?app=Backend [QSA,L]
 	
 	RewriteCond %{REQUEST_FILENAME} -f

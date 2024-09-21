@@ -19,10 +19,10 @@ class BackendApplication extends Application
 		Constructeur
 		------------
 	*/
-	public function __construct(string $appDir, string $appName)
+	public function __construct(string $rootDir, string $appDir, string $appName)
 	{
 		$this->name = "Backend";
-		parent::__construct($appDir, $appName);
+		parent::__construct($rootDir, $appDir, $appName);
 	}
 	
 	/*
