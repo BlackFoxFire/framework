@@ -1,0 +1,20 @@
+DirectoryIndex app.php
+Options Indexes FollowSymlinks
+
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	
+	RewriteBase /
+	
+	RewriteRule ^admin/ app.php?app=Backend [QSA,L]
+	
+	RewriteCond %{REQUEST_FILENAME} -f
+	RewriteRule ^ - [L]
+	
+	RewriteRule ^(.*)$ app.php [QSA,L]
+	
+</IfModule>
