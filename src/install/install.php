@@ -72,20 +72,16 @@ class InstallationManager
         self::getComposerInfos();
         self::getAppName();
         self::getUrl();
-        //self::getDbInfos();
+        self::getDbInfos();
 
         if(!is_writeable(ROOTDIR)) {
             die("\e[1;37;41mErreur: Le dossier \"" . ROOTDIR . "\" doit être accessible en écriture.\e[0m");
         }
 
         self::init();
-
-        printf(PHP_EOL . "Création des dossiers ..." . PHP_EOL);
+        printf(PHP_EOL . "Création des dossiers et fichiers nécessaires ..." . PHP_EOL);
         self::createFolder();
-
-        printf(PHP_EOL . "Création des fichiers ..." . PHP_EOL);
         self::createFile();
-
         printf(PHP_EOL);
     }
 
@@ -105,7 +101,7 @@ class InstallationManager
     }
 
     /**
-     * 
+     * Lit les données du fichier composer.json
      */
     protected static function getComposerInfos(): void
     {
@@ -195,6 +191,7 @@ class InstallationManager
     {
         $flag = true;
         $i = 1;
+        $inc = false;
         printf(PHP_EOL . "Si vous utilisez une base de données, entrez les renseignements suivants." . PHP_EOL);
 
         while($flag) {
@@ -210,10 +207,34 @@ class InstallationManager
 
             if(empty($db)) {
                 $flag = false;
+                printf("\e[0;31;40mAucune base de données configurée.\e[0m" . PHP_EOL);
+                printf("Vous pouvez modifier plutard le fichier db.xml" . PHP_EOL);
             }
             else {
-                $i++;
+                if($i == 1) {
+                    self::$db = $db;
+                    $inc = true;
+                }
+                elseif($i == 2) {
+                    if(!empty($user)) {
+                        self::$user = $user;
+                        $inc = true;
+                    }
+                    else {
+                        printf("\e[0;31;40mVeuillez entrer un nom d'utilisateur.\e[0m" . PHP_EOL . PHP_EOL);
+                    }
+                }
+                else {
+                    self::$password = (empty($password)) ? "" : $password;
+                    $inc = true;
+                }
 
+                if($inc) {
+                    $i++;
+                    $inc = false;
+                }
+
+                $flag = ($i == 4) ? false : true;
             }
         }
     }
