@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
-	<define var="db" value=""></define>
-	<define var="login" value=""></define>
-	<define var="password" value=""></define>
+	<define var="db" value="{{ db }}"></define>
+	<define var="login" value="{{ user }}"></define>
+	<define var="password" value="{{ password }}"></define>
 </definitions>

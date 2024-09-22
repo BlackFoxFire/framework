@@ -18,8 +18,12 @@ class InstallationManager
      */
 
     // Nom de l'application et namespace principale
+    protected static string $composerName;
     protected static string $appName;
     protected static string $url;
+    protected static string $db = "";
+    protected static string $user = "";
+    protected static string $password = "";
 
     // Les dossiers nécessaire au framework
     protected static array $forlders = array(
@@ -64,8 +68,48 @@ class InstallationManager
         printf("Vous êtes dans le programme d'installation du framework Mamba." . PHP_EOL);
         printf("Nous allons créer les dossiers et fichiers nécessaire au fonctionnement de l'application." . PHP_EOL);
         printf("Ce script doit-être lancé à partir du dossier racine de votre projet. (Au même endroit que composer.json)" . PHP_EOL . PHP_EOL);
+
+        self::getComposerInfos();
+        self::getAppName();
+        self::getUrl();
+        //self::getDbInfos();
+
+        if(!is_writeable(ROOTDIR)) {
+            die("\e[1;37;41mErreur: Le dossier \"" . ROOTDIR . "\" doit être accessible en écriture.\e[0m");
+        }
+
+        self::init();
+
+        printf(PHP_EOL . "Création des dossiers ..." . PHP_EOL);
+        self::createFolder();
+
+        printf(PHP_EOL . "Création des fichiers ..." . PHP_EOL);
+        self::createFile();
+
+        printf(PHP_EOL);
+    }
+
+    /**
+     * Lit le contenu d'un fichier
+     */
+    protected static function readFile(string $file): string|false
+    {
+        if($handle = fopen($file, 'r')) {
+            $contend = fread($handle, filesize($file));
+            fclose($handle);
+
+            return $contend;
+        }
+
+        return false;
+    }
+
+    /**
+     * 
+     */
+    protected static function getComposerInfos(): void
+    {
         printf("Lecture de composer.json ..." . PHP_EOL);
-        $name = "";
 
         if($contend = self::readFile("composer.json")) {
             $json = json_decode($contend, false);
@@ -74,19 +118,25 @@ class InstallationManager
                 $name = explode('/', $json->name);
                 $name[0] = ucfirst(preg_replace("#[.-]#", '', $name[0]));
                 $name[1] = ucfirst(preg_replace("#[.-]#", '', $name[1]));
-                $name = $name[0] . "\\" . $name[1];
+                self::$composerName = $name[0] . "\\" . $name[1];
             }
         }
+    }
 
+    /**
+     * Demande le nom de l'application à l'utilisateur
+     */
+    protected static function getAppName(): void
+    {
         $flag = true;
         $pattern = "#^([A-Z][[:alpha:]_]*[[:alpha:]])+(\\\\[A-Z][[:alpha:]_]*[[:alpha:]]+)*$#";
         printf(PHP_EOL . "Veuillez entrer le namespace principale de votre application." . PHP_EOL);
 
         while($flag) {    
-            $appName = readline("Namespace: [$name] ");
+            $appName = readline("Namespace: [" . self::$composerName . "] ");
 
             if(empty($appName)) {
-                self::$appName = $name;
+                self::$appName = self::$composerName;
                 $flag = false;
             }
             else {
@@ -101,7 +151,13 @@ class InstallationManager
                 }
             }
         }
-        
+    }
+
+    /**
+     * Demande l'url de l'application à l'utilisateur
+     */
+    protected static function getUrl(): void
+    {
         $flag = true;
         printf(PHP_EOL . "Veuillez entrer l'url de votre site web." . PHP_EOL);
 
@@ -130,20 +186,36 @@ class InstallationManager
                 }
             }
         }
+    }
 
-        if(!is_writeable(ROOTDIR)) {
-            die("\e[1;37;41mErreur: Le dossier \"" . ROOTDIR . "\" doit être accessible en écriture.\e[0m");
+    /**
+     * Demande les informations sur la base de donners à l'utilisateur
+     */
+    protected static function getDbInfos(): void
+    {
+        $flag = true;
+        $i = 1;
+        printf(PHP_EOL . "Si vous utilisez une base de données, entrez les renseignements suivants." . PHP_EOL);
+
+        while($flag) {
+            if($i == 1) {
+                $db = readline("Nom de la base de données: [] ");
+            }
+            elseif($i==2) {
+                $user = readline("Nom d'utilisateur: [] ");
+            }
+            else {
+                $password = readline("Mot de passe: [] ");
+            }
+
+            if(empty($db)) {
+                $flag = false;
+            }
+            else {
+                $i++;
+
+            }
         }
-
-        self::init();
-
-        printf(PHP_EOL . "Création des dossiers ..." . PHP_EOL);
-        self::createFolder();
-
-        printf(PHP_EOL . "Création des fichiers ..." . PHP_EOL);
-        self::createFile();
-
-        printf(PHP_EOL);
     }
 
     /**
@@ -153,8 +225,10 @@ class InstallationManager
     {
         self::$filesForlder = dirname(__FILE__) . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR;
 
+        $dbPatttern = array("#{{ db }}#", "#{{ user }}#", "#{{ password }}#");
+        $dbReplacement = array('{{ bd }}' => self::$db, '{{ user }}' => self::$user, '{{ password }}' => self::$password);
+
         self::$files = array(
-            (object) array('name' => "db.xml",      'dir' => self::$forlders['config']),
             (object) array('name' => "404.html",    'dir' => self::$forlders['errors']),
             (object) array('name' => "layout.html", 'dir' => self::$forlders['templates']),
             (object) array('name' => "style.css",   'dir' => self::$forlders['css']),
@@ -163,15 +237,15 @@ class InstallationManager
             (object) array('name' => "app.xml",     'dir' => self::$forlders['frontConf']),
             (object) array('name' => "index.html",  'dir' => self::$forlders['frontView']),
 
-            (object) array('name' => "link.xml",                'dir' => self::$forlders['config'],     'pattern' => "url",     'replacement' => self::$url),
-            (object) array('name' => ".htaccess",               'dir' => self::$forlders['public'],     'pattern' => "url",     'replacement' => self::$url),
-            (object) array('name' => "app.php",                 'dir' => self::$forlders['public'],     'pattern' => "appName", 'replacement' => self::$appName),
-            (object) array('name' => "BackendApplication.php",  'dir' => self::$forlders['back'],       'pattern' => "appName", 'replacement' => self::$appName),
-            (object) array('name' => "routes.xml",              'dir' => self::$forlders['backConf'],   'pattern' => "url",     'replacement' => self::$url . 'admin/'),
-            (object) array('name' => "FrontendApplication.php", 'dir' => self::$forlders['front'],      'pattern' => "appName", 'replacement' => self::$appName),
-            (object) array('name' => "routes.xml",              'dir' => self::$forlders['frontConf'],  'pattern' => "url",     'replacement' => self::$url),
-            (object) array('name' => "ExampleController.php",   'dir' => self::$forlders['frontMod'],   'pattern' => "appName", 'replacement' => self::$appName)
-            //(object) array('name' => "", 'dir' => self::$forlders['']),
+            (object) array('name' => "db.xml",                  'dir' => self::$forlders['config'],     'pattern' => $dbPatttern,       'replacement' => $dbReplacement),
+            (object) array('name' => "link.xml",                'dir' => self::$forlders['config'],     'pattern' => "#{{ url }}#",     'replacement' => self::$url),
+            (object) array('name' => ".htaccess",               'dir' => self::$forlders['public'],     'pattern' => "#{{ url }}#",     'replacement' => self::$url),
+            (object) array('name' => "app.php",                 'dir' => self::$forlders['public'],     'pattern' => "#{{ appName }}#", 'replacement' => self::$appName),
+            (object) array('name' => "BackendApplication.php",  'dir' => self::$forlders['back'],       'pattern' => "#{{ appName }}#", 'replacement' => self::$appName),
+            (object) array('name' => "routes.xml",              'dir' => self::$forlders['backConf'],   'pattern' => "#{{ url }}#",     'replacement' => self::$url . 'admin/'),
+            (object) array('name' => "FrontendApplication.php", 'dir' => self::$forlders['front'],      'pattern' => "#{{ appName }}#", 'replacement' => self::$appName),
+            (object) array('name' => "routes.xml",              'dir' => self::$forlders['frontConf'],  'pattern' => "#{{ url }}#",     'replacement' => self::$url),
+            (object) array('name' => "ExampleController.php",   'dir' => self::$forlders['frontMod'],   'pattern' => "#{{ appName }}#", 'replacement' => self::$appName)
         );
     }
 
@@ -200,7 +274,7 @@ class InstallationManager
                 $contend = self::readFile($src);
 
                 if(property_exists($file, 'pattern')) {
-                    $contend = preg_replace("#\{\{ " . $file->pattern . " \}\}#", $file->replacement, $contend);
+                    $contend = preg_replace($file->pattern, $file->replacement, $contend);
                 }
 
                 if(!file_exists($dest)) {
@@ -235,21 +309,6 @@ class InstallationManager
             }
             
         }
-    }
-
-    /**
-     * Lit le contenu d'un fichier
-     */
-    protected static function readFile(string $file): string|false
-    {
-        if($handle = fopen($file, 'r')) {
-            $contend = fread($handle, filesize($file));
-            fclose($handle);
-
-            return $contend;
-        }
-
-        return false;
     }
 
     /**
