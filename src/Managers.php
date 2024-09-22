@@ -21,7 +21,7 @@ class Managers
 	// L'api utilisé pour accéder à la base de données
 	protected string $api;
 	// Le lien avec la base de données
-	protected \PDO $dao;
+	protected \PDO|null $dao;
 	// Nom de l'application, du namespace et du dossier de l'application
 	protected string $appName = "";
 	// Tableau des modeles
@@ -31,7 +31,7 @@ class Managers
 		Constructeur
 		------------
 	*/
-	public function __construct(string $api, \PDO $dao, string $appName)
+	public function __construct(string $api, \PDO|null $dao, string $appName)
 	{
 		$this->api = $api;
 		$this->dao = $dao;
