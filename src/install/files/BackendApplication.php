@@ -3,8 +3,6 @@
 /*
 *
 * BackendApplication.php
-* @Auteur : Christophe Dufour
-*
 * Application orientée administrateur.
 *
 */

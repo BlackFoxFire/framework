@@ -3,8 +3,6 @@
 /*
 *
 * FrontendApplication.php
-* @Auteur : Christophe Dufour
-*
 * Application orientée utilisateur.
 *
 */

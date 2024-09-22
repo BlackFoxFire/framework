@@ -3,9 +3,6 @@
 /*
 *
 * ExampleController.php
-* @Auteur : Christophe Dufour
-*
-*
 *
 */
 
