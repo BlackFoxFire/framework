@@ -8,7 +8,7 @@ Options Indexes FollowSymlinks
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	
-	RewriteBase /
+	RewriteBase {{ url }}
 	
 	RewriteRule ^admin/ app.php?app=Backend [QSA,L]
 	

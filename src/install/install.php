@@ -11,9 +11,6 @@ define("DS", DIRECTORY_SEPARATOR);
 //define("ROOTDIR", dirname(__DIR__ . DIRECTORY_SEPARATOR, 3));
 define("ROOTDIR", realpath('.') . DIRECTORY_SEPARATOR);
 
-/**
- * Classe qui gère l'installation des fichiers nécessaire au framework Mamba
- */
 class InstallationManager
 {
     /**
@@ -22,6 +19,7 @@ class InstallationManager
 
     // Nom de l'application et namespace principale
     protected static string $appName;
+    protected static string $url;
 
     // Les dossiers nécessaire au framework
     protected static array $forlders = array(
@@ -63,43 +61,89 @@ class InstallationManager
      */
     public static function go(): void
     {
-        $options = getopt("", ["help", "app:"]);
+        printf("Vous êtes dans le programme d'installation du framework Mamba." . PHP_EOL);
+        printf("Nous allons créer les dossiers et fichiers nécessaire au fonctionnement de l'application." . PHP_EOL);
+        printf("Ce script doit-être lancé à partir du dossier racine de votre projet. (Au même endroit que composer.json)" . PHP_EOL . PHP_EOL);
+        printf("Lecture de composer.json ..." . PHP_EOL);
+        $name = "";
 
-        if(empty($options)) {
-            printf("Utilisation : install.php [--help] [--app Nom_application]" . PHP_EOL);
-            die("Erreur: vous devez spécifier un nom d'application." . PHP_EOL);
+        if($contend = self::readFile("composer.json")) {
+            $json = json_decode($contend, false);
+
+            if(property_exists($json, 'name')) {
+                $name = explode('/', $json->name);
+                $name[0] = ucfirst(preg_replace("#[.-]#", '', $name[0]));
+                $name[1] = ucfirst(preg_replace("#[.-]#", '', $name[1]));
+                $name = $name[0] . "\\" . $name[1];
+            }
+        }
+
+        $flag = true;
+        $pattern = "#^([A-Z][[:alpha:]_]*[[:alpha:]])+(\\\\[A-Z][[:alpha:]_]*[[:alpha:]]+)*$#";
+        printf(PHP_EOL . "Veuillez entrer le namespace principale de votre application." . PHP_EOL);
+
+        while($flag) {    
+            $appName = readline("Namespace: [$name] ");
+
+            if(empty($appName)) {
+                self::$appName = $name;
+                $flag = false;
+            }
+            else {
+                if(preg_match($pattern, $appName)) {
+                    self::$appName = $appName;
+                    $flag = false;
+                }
+                else {
+                    $pattern2 = "^([A-Z][a-zA-Z_]*[a-zA-Z])+(\\[A-Z][a-zA-Z_]*[a-zA-Z]+)*$";
+                    printf("\e[1;37;41mNamespace invalide. Il doit commencer par une majuscule suivie de minuscule(s). Eventuellement un ou plusieurs sous-espace de nom séparé par un '\\'\e[0m" . PHP_EOL);
+                    printf("Le namespace doit correspondre au motif suivant : $pattern2" . PHP_EOL . PHP_EOL);
+                }
+            }
         }
         
-        if(array_key_exists("help", $options)) {
-            self::help();
-            exit(0);
+        $flag = true;
+        printf(PHP_EOL . "Veuillez entrer l'url de votre site web." . PHP_EOL);
+
+        while($flag) {    
+            $url = readline("Url: [/] ");
+
+            if(empty($url)) {
+                self::$url = '/';
+                $flag = false;
+            }
+            else {
+                if(filter_var($url, FILTER_VALIDATE_URL)) {
+                    $infos = parse_url($url);
+
+                    if(array_key_exists('path', $infos)) {
+                        self::$url = preg_match("#[/]$#", $infos['path']) ? $infos['path'] : $infos['path'] . '/';
+                    }
+                    else {
+                        self::$url = '/';
+                    }
+
+                    $flag = false;
+                }
+                else {
+                    printf("\e[1;37;41mVeuillez entrer une url valide\e[0m" . PHP_EOL . PHP_EOL);
+                }
+            }
+        }
+
+        if(!is_writeable(ROOTDIR)) {
+            die("\e[1;37;41mErreur: Le dossier \"" . ROOTDIR . "\" doit être accessible en écriture.\e[0m");
         }
 
         self::init();
-        self::$appName = ucfirst($options['app']);
-        
-        if(!is_writeable(ROOTDIR)) {
-            die("Le dossier \"" . ROOTDIR . "\" doit être accessible en écriture.");
-        }
 
+        printf(PHP_EOL . "Création des dossiers ..." . PHP_EOL);
         self::createFolder();
-        self::copyFiles();
-        self::createFile();
-    }
 
-    /**
-     * Affiche l'aide de la ligne de commande
-     */
-    protected static function help(): void
-    {
-        printf("Utilisation : install.php [--help] [--app Nom_application]" . PHP_EOL);
-        printf("Installe les fichiers necessaire du framework Mamba." . PHP_EOL . PHP_EOL);
-        printf("Argument requis :" . PHP_EOL);
-        printf("   --app		Nom de l'application (Namespace principale)." . PHP_EOL);
-        printf("        		Les noms de classe DOIVENT être déclarés en StudlyCaps." . PHP_EOL);
-        printf("        		Il est possible de modifier le nom dans le fichier app.php." . PHP_EOL);
-        printf("Arguments optionnels :" . PHP_EOL);
-        printf("   --help		Affiche l'aide." . PHP_EOL);
+        printf(PHP_EOL . "Création des fichiers ..." . PHP_EOL);
+        self::createFile();
+
+        printf(PHP_EOL);
     }
 
     /**
@@ -110,26 +154,24 @@ class InstallationManager
         self::$filesForlder = dirname(__FILE__) . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR;
 
         self::$files = array(
-            (object) array('name' => "db.xml",                  'dir' => self::$forlders['config']),
-            (object) array('name' => "link.xml",                'dir' => self::$forlders['config']),
-            (object) array('name' => "404.html",                'dir' => self::$forlders['errors']),
-            (object) array('name' => "layout.html",             'dir' => self::$forlders['templates']),
-            (object) array('name' => ".htaccess",               'dir' => self::$forlders['public']),
-            (object) array('name' => "style.css",               'dir' => self::$forlders['css']),
-            (object) array('name' => "java.js",                 'dir' => self::$forlders['js']),
-            (object) array('name' => "app.xml",                 'dir' => self::$forlders['backConf']),
-            (object) array('name' => "routes.xml",              'dir' => self::$forlders['backConf']),
-            (object) array('name' => "app.xml",                 'dir' => self::$forlders['frontConf']),
-            (object) array('name' => "routes.xml",              'dir' => self::$forlders['frontConf']),
-            (object) array('name' => "index.html",              'dir' => self::$forlders['frontView']),
-            //(object) array('name' => "", 'dir' => self::$forlders['']),
-        );
+            (object) array('name' => "db.xml",      'dir' => self::$forlders['config']),
+            (object) array('name' => "404.html",    'dir' => self::$forlders['errors']),
+            (object) array('name' => "layout.html", 'dir' => self::$forlders['templates']),
+            (object) array('name' => "style.css",   'dir' => self::$forlders['css']),
+            (object) array('name' => "java.js",     'dir' => self::$forlders['js']),
+            (object) array('name' => "app.xml",     'dir' => self::$forlders['backConf']),
+            (object) array('name' => "app.xml",     'dir' => self::$forlders['frontConf']),
+            (object) array('name' => "index.html",  'dir' => self::$forlders['frontView']),
 
-        self::$filesToCreate = array(
-            (object) array('name' => "app.php",                 'dir' => self::$forlders['public']),
-            (object) array('name' => "BackendApplication.php",  'dir' => self::$forlders['back']),
-            (object) array('name' => "FrontendApplication.php", 'dir' => self::$forlders['front']),
-            (object) array('name' => "ExampleController.php",   'dir' => self::$forlders['frontMod'])
+            (object) array('name' => "link.xml",                'dir' => self::$forlders['config'],     'pattern' => "url",     'replacement' => self::$url),
+            (object) array('name' => ".htaccess",               'dir' => self::$forlders['public'],     'pattern' => "url",     'replacement' => self::$url),
+            (object) array('name' => "app.php",                 'dir' => self::$forlders['public'],     'pattern' => "appName", 'replacement' => self::$appName),
+            (object) array('name' => "BackendApplication.php",  'dir' => self::$forlders['back'],       'pattern' => "appName", 'replacement' => self::$appName),
+            (object) array('name' => "routes.xml",              'dir' => self::$forlders['backConf'],   'pattern' => "url",     'replacement' => self::$url . 'admin/'),
+            (object) array('name' => "FrontendApplication.php", 'dir' => self::$forlders['front'],      'pattern' => "appName", 'replacement' => self::$appName),
+            (object) array('name' => "routes.xml",              'dir' => self::$forlders['frontConf'],  'pattern' => "url",     'replacement' => self::$url),
+            (object) array('name' => "ExampleController.php",   'dir' => self::$forlders['frontMod'],   'pattern' => "appName", 'replacement' => self::$appName)
+            //(object) array('name' => "", 'dir' => self::$forlders['']),
         );
     }
 
@@ -138,64 +180,11 @@ class InstallationManager
      */
     protected static function createFolder(): void
     {
-        printf("Création des dossiers nécessaire:" . PHP_EOL);
-        
         foreach(self::$forlders as $folder) {
             if(!file_exists($folder)) {
-                printf($folder . PHP_EOL);
                 mkdir($folder, 0777, true);
             }
         }
-
-        printf(PHP_EOL);
-    }
-
-    /**
-     * Copie les fichiers nécessaire au framework
-     */
-    protected static function copyFiles(): void
-    {
-        printf("Copie des fichiers:" . PHP_EOL);
-        
-        foreach(self::$files as $file) {
-            $src = self::$filesForlder . $file->name;
-            $dest  = $file->dir . DIRECTORY_SEPARATOR . $file->name;
-
-            if(is_readable($src)) {
-                if(!file_exists($dest)) {
-                    printf("Copie de: " . $dest . PHP_EOL);
-                    if(!copy($src, $dest)) {
-                        printf("Erreur! Impossible d'écrire le fichier: " . $dest . PHP_EOL);
-                    }
-                }
-                else {
-                    $flag = true;
-
-                    while($flag) {
-                        $response = readline("Le fichier $dest existe déjà, faut-il le réécrire ? [O-N] (Oui par default): ");
-                        
-                        if(in_array($response, ['o', 'O', 'n', 'N', ''])) {
-                            if(in_array($response, ['o', 'O', ''])) {
-                                printf("Copie de: " . $dest . PHP_EOL);
-
-                                if(!copy($src, $dest)) {
-                                    printf("Erreur! Impossible d'écrire le fichier: " . $dest . PHP_EOL);
-                                }
-                            }
-                            else {
-                                printf("Attention: Le fichier " . $dest . " n'a pas été copié." . PHP_EOL);
-                            }
-                            $flag = false;
-                        }
-                    }
-                }
-            }
-            else {
-                printf("Erreur! Impossible d'accéder au fichier: " . $src . PHP_EOL);
-            }
-        }
-
-        printf(PHP_EOL);
     }
 
     /**
@@ -203,39 +192,38 @@ class InstallationManager
      */
     protected static function createFile(): void
     {
-        printf("Création des fichiers:" . PHP_EOL);
-
-        foreach(self::$filesToCreate as $file) {
+        foreach(self::$files as $file) {
             $src = self::$filesForlder . $file->name;
             $dest  = $file->dir . DIRECTORY_SEPARATOR . $file->name;
 
             if(is_readable($src)) {
                 $contend = self::readFile($src);
-                $contend = preg_replace("#\{\{ appName \}\}#", self::$appName, $contend);
+
+                if(property_exists($file, 'pattern')) {
+                    $contend = preg_replace("#\{\{ " . $file->pattern . " \}\}#", $file->replacement, $contend);
+                }
 
                 if(!file_exists($dest)) {
-                    printf("Création de: " . $dest . PHP_EOL);
-                    
                     if(!self::writeFile($dest, $contend)) {
-                        printf("Erreur! Impossible d'écrire le fichier: " . $dest . PHP_EOL);
+                        printf("\e[1;37;41mErreur! Impossible d'écrire le fichier: " . $dest . "\e[0m" . PHP_EOL);
                     }
                 }
                 else {
                     $flag = true;
 
                     while($flag) {
-                        $response = readline("Le fichier $dest existe déjà, faut-il le réécrire ? [O-N] (Oui par default): ");
+                        $response = readline("Le fichier $dest existe déjà, faut-il le réécrire ? [O-N] ");
 
                         if(in_array($response, ['o', 'O', 'n', 'N', ''])) {
-                            if(in_array($response, ['o', 'O', ''])) {
-                                printf("Création de: " . $dest . PHP_EOL);
+                            if(in_array($response, ['o', 'O'])) {
+                                printf("\e[0;31;40mRéécriture de: " . $dest . "\e[0m" . PHP_EOL);
 
                                 if(!self::writeFile($dest, $contend)) {
-                                    printf("Erreur! Impossible d'écrire le fichier: " . $dest . PHP_EOL);
+                                    printf("\e[1;37;41mErreur! Impossible d'écrire le fichier: " . $dest . "\e[0m" . PHP_EOL);
                                 }
                             }
                             else {
-                                printf("Attention: Le fichier " . $dest . " n'a pas été copié." . PHP_EOL);
+                                printf("\e[0;32;40mAucune modification du fichier: " . $dest . "\e[0m" . PHP_EOL);
                             }
                             $flag = false;
                         }
@@ -247,8 +235,6 @@ class InstallationManager
             }
             
         }
-
-        printf(PHP_EOL);
     }
 
     /**
