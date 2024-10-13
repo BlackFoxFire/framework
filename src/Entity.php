@@ -9,9 +9,9 @@
 *
 */
 
-namespace Mamba;
+namespace Blackfox\Mamba;
 
-use Mamba\Traits\Hydrator;
+use Blackfox\Mamba\Traits\Hydrator;
 
 abstract class Entity
 {

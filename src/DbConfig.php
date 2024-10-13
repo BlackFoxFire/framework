@@ -9,9 +9,9 @@
 *
 */
 
-namespace Mamba;
+namespace Blackfox\Mamba;
 
-use Mamba\Traits\LoadXMLFile;
+use Blackfox\Mamba\Traits\LoadXMLFile;
 
 class DbConfig
 {

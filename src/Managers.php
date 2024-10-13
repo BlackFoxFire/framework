@@ -9,7 +9,7 @@
 *
 */
 
-namespace Mamba;
+namespace Blackfox\Mamba;
 
 class Managers
 {

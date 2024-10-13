@@ -9,7 +9,7 @@
 *
 */
 
-namespace Mamba;
+namespace Blackfox\Mamba;
 
 abstract class Model
 {

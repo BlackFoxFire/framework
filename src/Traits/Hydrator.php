@@ -9,7 +9,7 @@
 *
 */
 
-namespace Mamba\Traits;
+namespace Blackfox\Mamba\Traits;
 
 trait Hydrator
 {
