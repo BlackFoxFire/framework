@@ -46,9 +46,10 @@ abstract class Application
 		$this->httpRequest = new HTTPRequest($this);
 		$this->httpResponse = new HTTPResponse($this);
 		$this->user = new User($this);
-		DbConfig::init($this);
-		Config::init($this);
-		Link::init($this);
+
+		DbConfig::load($rootDir . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "db.json");
+		Config::load($appDir . "App" . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "app.json");
+		Link::load($rootDir . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "link.json");
 	}
 	
 	/*

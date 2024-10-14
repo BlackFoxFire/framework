@@ -1,0 +1,5 @@
+{
+    "db": "{{ db }}",
+    "login": "{{ user }}",
+    "password": "{{ password }}"
+}

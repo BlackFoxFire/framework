@@ -9,7 +9,7 @@
 
 namespace {{ appName }}\App\Backend;
 
-use \Blackfox\Mamba\Application;
+use Blackfox\Mamba\Application;
 
 class BackendApplication extends Application
 {

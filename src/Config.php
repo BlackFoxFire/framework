@@ -11,38 +11,41 @@
 
 namespace Blackfox\Mamba;
 
-use Blackfox\Mamba\Traits\LoadXMLFile;
-
 class Config
 {
-	use LoadXMLFile;
-
-	/*
-		Les attributs
-		-------------
-	*/
+	/**
+     * Propriété
+     */
 	
-	// Fichier de configuration
-	protected static string $file = "";
 	// Tableau des paramètres de l'application
     protected static array $vars = [];
 
-	/*
-		Les méthodes
-		------------
-	*/
+	/**
+     * Méthodes
+     */
 
-	// Initialise le tableau des paramètres de l'application
-	public static function init(Application $app): void
+	/**
+     * Lit un fichier de configuration json
+     * 
+     * @param string $filename, le nom du fichier à lire
+     */
+	public static function load(string $filename): void
 	{
 		if(empty(self::$vars)) {
-			self::$file = $app->appDir() . "App" . DIRECTORY_SEPARATOR . $app->name() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "app.xml";
-			self::$vars = self::loadXmlFile(self::$file);
+            $file = new \SplFileObject($filename);
+            $content = $file->fread($file->getSize());
+            self::$vars = json_decode($content, true);
 		}
 	}
 
-	// Retourne la valeur d'un parametre de l'application
-	public static function get(string $key = null): mixed
+	/**
+	 * Retourne la valeur d'un parametre de l'application
+	 * 
+	 * @param string $key, un index dans le tableau des parametres
+	 * 
+	 * @return mixed
+	 */
+	public static function get(string $key): mixed
 	{
 		if(isset(self::$vars[$key])) {
 			return self::$vars[$key];

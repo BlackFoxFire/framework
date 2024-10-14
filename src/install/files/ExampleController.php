@@ -8,8 +8,8 @@
 
 namespace {{ appName }}\App\Frontend\Modules\Example;
 
-use \Blackfox\Mamba\BackController;
-use \Blackfox\Mamba\HTTPRequest;
+use Blackfox\Mamba\BackController;
+use Blackfox\Mamba\HTTPRequest;
 
 class ExampleController extends BackController
 {

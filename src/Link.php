@@ -11,37 +11,38 @@
 
 namespace Blackfox\Mamba;
 
-use Blackfox\Mamba\Traits\LoadXMLFile;
-
 class Link
-{	
-	use LoadXMLFile;
-
-	/*
-		Les attributs
-		-------------
-	*/
+{
+	/**
+     * Propriété
+     */
 	
-	// Fichier de configuration
-	protected static string $file = "";
 	// Tableau des liens de l'application
     protected static array $vars = [];
 	
-	/*
-		Les méthodes
-		------------
-	*/
+    /**
+     * Méthodes
+     */
 
-	// Initialise le tableau des liens
-	public static function init(Application $app): void
+	/**
+     * Lit un fichier de configuration json
+     * 
+     * @param string $filename, le nom du fichier à lire
+     */
+	public static function load(string $filename): void
 	{
 		if(empty(self::$vars)) {
-			self::$file = $app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "link.xml";
-			self::$vars = self::loadXmlFile(self::$file);
+            $file = new \SplFileObject($filename);
+            $content = $file->fread($file->getSize());
+            self::$vars = json_decode($content, true);
 		}
 	}
 	
-	// Retourne un lien du tableau des liens
+	/**
+	 * Retourne une valeur du tableau des liens
+	 * 
+	 * @return mixed
+	 */
 	public static function get(string $key): mixed
 	{
 		if(isset(self::$vars[$key])) {
@@ -51,7 +52,11 @@ class Link
 		return null;
 	}
 
-	// Retourne le tableau des liens
+	/**
+     * Retourne le tableau des liens
+     * 
+     * @return array
+     */
 	public static function getAll(): array
 	{
 		return self::$vars;

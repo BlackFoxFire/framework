@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<definitions>
-    <!-- Fichier CSS -->
-    <define var="url_css" value="{{ url }}css/style.css" ></define>
-    <!-- Fichier javascript -->
-    <define var="url_js" value="{{ url }}js/java.js" ></define>
-    <!-- Autres -->
-    <define var="url_index" val="{{ url }}" ></define>
-</definitions>

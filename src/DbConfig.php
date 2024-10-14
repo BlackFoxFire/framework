@@ -11,38 +11,39 @@
 
 namespace Blackfox\Mamba;
 
-use Blackfox\Mamba\Traits\LoadXMLFile;
-
 class DbConfig
 {
-    use LoadXMLFile;
+    /**
+     * Propriété
+     */
 
-    /*
-		Les attributs
-		-------------
-	*/
-
-    // Fichier de configuration
-    protected static string $file = "";
     // Tableau des paramètres de la base de données
     protected static array $vars = [];
 
-    /*
-		Les méthodes
-		------------
-	*/
+    /**
+     * Méthodes
+     */
 
-    // Initialise le tableau des paramètres de la base de données
-	public static function init(Application $app): void
+    /**
+     * Lit un fichier de configuration json
+     * 
+     * @param string $filename, le nom du fichier à lire
+     */
+	public static function load(string $filename): void
 	{
 		if(empty(self::$vars)) {
-            self::$file = $app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "db.xml";
-			self::$vars = self::loadXmlFile(self::$file);
+            $file = new \SplFileObject($filename);
+            $content = $file->fread($file->getSize());
+            self::$vars = json_decode($content, true);
 		}
 	}
 
-    // Retourne le tableau des paramètres de la base de données
-    public static function get(): mixed
+    /**
+     * Retourne le tableau des paramètres de la base de données, sinon null
+     * 
+     * @return array|null
+     */
+    public static function get(): array|null
     {
         if(!empty(self::$vars)) {
             return self::$vars;
