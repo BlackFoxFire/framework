@@ -1,64 +1,50 @@
 <?php
 
-/*
-*
-* Link.php
-* @Auteur : Christophe Dufour
-*
-* Gère les liens de l'application
-*
-*/
+/**
+ * Link.php
+ * @Auteur : Christophe Dufour
+ * 
+ * Gère les liens de l'application
+ */
 
 namespace Blackfox\Mamba;
 
-class Link
+class Link extends AbstractConfig
 {
-	/**
-     * Propriété
-     */
-	
-	// Tableau des liens de l'application
-    protected static array $vars = [];
-	
+
     /**
-     * Méthodes
-     */
-
-	/**
-     * Lit un fichier de configuration json
+     * Constructeur
      * 
-     * @param string $filename, le nom du fichier à lire
+     * @param Application $application
      */
-	public static function load(string $filename): void
-	{
-		if(empty(self::$vars)) {
-            $file = new \SplFileObject($filename);
-            $content = $file->fread($file->getSize());
-            self::$vars = json_decode($content, true);
-		}
-	}
-	
-	/**
-	 * Retourne une valeur du tableau des liens
-	 * 
-	 * @return mixed
-	 */
-	public static function get(string $key): mixed
-	{
-		if(isset(self::$vars[$key])) {
-			return self::$vars[$key];
-		}
-		
-		return null;
-	}
+    public function __construct(Application $application)
+    {
+        parent::__construct($application);
+        $this->filename = $this->app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "link.json";
 
-	/**
-     * Retourne le tableau des liens
+        if(!$this->load()) {
+			$this->create();
+		}
+    }
+
+    /**
+     * Crée la structure du tableau des paramètres de configuration et l'enregistre dans un fichier json
+	 * Retourne le nombre d'octets écrits, ou false si une erreur survient.
      * 
-     * @return array
+     * @return int|false
      */
-	public static function getAll(): array
-	{
-		return self::$vars;
-	}
+    public function create(array $vars = []): int|false
+    {
+        if(!empty($vars)) {
+            $this->vars = $vars;
+        }
+        else {
+            $this->vars = array(
+                'index' => "/"
+            );
+        }
+
+       return $this->write();
+    }
+
 }

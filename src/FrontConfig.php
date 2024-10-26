@@ -1,15 +1,15 @@
 <?php
 
 /**
- * DBConfig.php
+ * FrontConfig.php
  * @Auteur : Christophe Dufour
  * 
- * Gère les paramètres de la base de données
+ * Gère les paramètres de l'application
  */
 
 namespace Blackfox\Mamba;
 
-class DBConfig extends AbstractConfig
+class FrontConfig extends AbstractConfig
 {
 
     /**
@@ -20,7 +20,7 @@ class DBConfig extends AbstractConfig
     public function __construct(Application $application)
     {
         parent::__construct($application);
-        $this->filename = $this->app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "db.json";
+        $this->filename = $this->app->appDir() . "App" . DIRECTORY_SEPARATOR . "Frontend" . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "app.json";
 
         if(!$this->load()) {
 			$this->create();
@@ -38,15 +38,8 @@ class DBConfig extends AbstractConfig
         if(!empty($vars)) {
             $this->vars = $vars;
         }
-        else {
-            $this->vars = array(
-                'db' => "",
-                'login' => "",
-                'password' => ""
-            );
-        }
-
-        return $this->write();
+        
+       return $this->write();
     }
 
 }

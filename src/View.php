@@ -119,8 +119,8 @@ class View extends ApplicationComponent
 		
 		$this->data['user'] = $this->app->user();
 
-		if(Link::getAll()) {
-			$this->setData(Link::getAll());
+		if($this->app->link()->get()) {
+			$this->setData($this->app->link()->get());
 		}
 		
 		$loader = new \Twig\Loader\FilesystemLoader($this->path);
