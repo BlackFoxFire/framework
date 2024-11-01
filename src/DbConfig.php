@@ -40,8 +40,8 @@ class DBConfig extends AbstractConfig
         }
         else {
             $this->vars = array(
-                'db' => "",
-                'login' => "",
+                'dbname' => "",
+                'username' => "",
                 'password' => ""
             );
         }
