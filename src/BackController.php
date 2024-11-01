@@ -37,7 +37,7 @@ abstract class BackController extends ApplicationComponent
 	{
 		parent::__construct($application);
 		
-		$this->managers = new Managers("PDO", PDOFactory::mysqlConnexion($this->app->dbConfig()->get()), $this->app->appName());
+		$this->managers = new Managers("PDO", PDOFactory::mysqlConnexion($this->app->config()['database']), $this->app->appName());
 		$this->view = new View($application, $controller);
 
 		$this->setController($controller);

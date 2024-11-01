@@ -33,14 +33,8 @@ abstract class Application
 	protected string $name;
 	// Objet représentant l'utilisateur
 	protected User $user;
-	// Object contenant la configuration de la base de données
-	protected DBConfig $dbConfig;
-	// Object contenant la configuration globale de l'application
-	protected AppConfig $appConfig;
-	// Object contenant la configuration de l'application frontend
-	protected FrontConfig $frontConfig;
-	// Object contenant la configuration de l'application backend
-	protected BackConfig $backConfig;
+	// Object contenant les paramètres de configuration de l'application
+	protected Config $config;
 	// Object contenant les liens de l'application
 	protected Link $link;
 
@@ -57,10 +51,7 @@ abstract class Application
 		$this->httpRequest = new HTTPRequest($this);
 		$this->httpResponse = new HTTPResponse($this);
 		$this->user = new User($this);
-		$this->dbConfig = new DBConfig($this);
-		$this->appConfig = new AppConfig($this);
-		$this->frontConfig = new FrontConfig($this);
-		$this->backConfig = new BackConfig($this);
+		$this->config = new Config($this);
 		$this->link = new Link($this);
 	}
 	
@@ -111,28 +102,10 @@ abstract class Application
 		return $this->user;
 	}
 
-	// Retourne la valeur de $dbConfig
-	public function dbConfig(): DBConfig
-	{
-		return $this->dbConfig;
-	}
-
-	// Retourne la valeur de $appConfig
-	public function appConfig(): AppConfig
-	{
-		return $this->appConfig;
-	}
-
 	// Retourne la valeur de $config
-	public function frontConfig(): FrontConfig
+	public function config(): Config
 	{
-		return $this->frontConfig;
-	}
-
-	// Retourne la valeur de $config
-	public function backConfig(): BackConfig
-	{
-		return $this->backConfig;
+		return $this->config;
 	}
 
 	// Retourne la valeur de $link

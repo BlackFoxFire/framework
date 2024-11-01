@@ -9,16 +9,18 @@
 
 namespace Blackfox\Mamba;
 
-abstract class AbstractConfig extends ApplicationComponent
+use Blackfox\Mamba\Enums\ConfigValue;
+
+abstract class AbstractConfig extends ApplicationComponent implements \ArrayAccess
 {
 
     /**
      * Propriétés
      */
 
-    // Nom du fihcier de configuration
+    // Nom du fichier de configuration json
     protected string $filename;
-    // Tableau des paramètres de l'application
+    // Tableau des paramètres de configuration de l'application
     protected array $vars = [];
 
     /**
@@ -39,6 +41,7 @@ abstract class AbstractConfig extends ApplicationComponent
      * Retourne la valeur de $filename
      * 
      * @return string
+     * Le nom du fichier de configuration
      */
     public function filename(): string
     {
@@ -46,9 +49,25 @@ abstract class AbstractConfig extends ApplicationComponent
     }
 
     /**
-     * Lit un fichier de configuration json
+     * Retourne la valeur de $vars
+     * 
+     * @return array|null
+     * Retourne un tableau ou null si le tableau est vide
+     */
+    public function vars(): array|null
+    {
+        return !empty($this->vars) ? $this->vars : null;
+    }
+
+    /**
+     * Méthodes
+     */
+
+    /**
+     * Lit un fichier de configuration au format json
 	 * 
 	 * @return bool
+     * Retourne true en cas de succès, sinon false
      */
 	protected function load(): bool
 	{
@@ -68,17 +87,21 @@ abstract class AbstractConfig extends ApplicationComponent
 
 	/**
 	 * Crée la structure du tableau des paramètres de configuration et l'enregistre dans un fichier json
-	 * Retourne le nombre d'octets écrits, ou false si une erreur survient.
 	 * 
-	 *  @return int|false
+     * @param array $vars
+     * [Optional]
+     * Tableau contenant les paramètres de configuration
+     * 
+	 * @return int|false
+     * Retourne le nombre d'octets écrits, ou false si une erreur survient
 	 */
 	abstract public function create(array $vars = []): int|false;
 
     /**
-	 * Ecrit un fichier de configuration json
-	 * Retourne le nombre d'octets écrits, ou false si une erreur survient.
+	 * Ecrit un fichier de paramètres au format json
 	 * 
 	 * @return int|false
+     * Retourne le nombre d'octets écrits, ou false si une erreur survient.
 	 */
 	public function write(): int|false
 	{
@@ -87,43 +110,97 @@ abstract class AbstractConfig extends ApplicationComponent
 	}
 
     /**
-	 * Retourne une valeur du tableau de configuration ou le tableau en entier si celui-ci n'est pas vide
+     * Vérifie si une clé existe dans le tableau des paramètres
+     * 
+     * @param string $key
+     * La clé à analyser
+     * @param ConfigValue $index
+     * [Optional]
+     * Sous tableau où l'analyse doit se faire
+     * 
+     * @return bool
+     * Retourne true en cas de succès, sinon false
+     */
+    public function exists(string $key, ConfigValue $index = ConfigValue::Frontend): bool
+    {
+        return array_key_exists($key, $this->vars[$index->value]);
+    }
+
+    /**
+	 * Retourne une valeur du tableau des paramètres
 	 * 
-	 * @param string $key = null, index du tableau dont la valeur est à retourner
-	 * 
+	 * @param string $key
+     * La clé du tableau dont la valeur est à retourner
 	 * @return mixed
+     * Retourne une valeur
 	 */
-	public function get(string $key = null): mixed
-	{
-		if($key === null) {
-			if(!empty($this->vars)) {
-				return $this->vars;
-			}
-		}
-		else {
-			if(isset($this->vars[$key])) {
-				return $this->vars[$key];
-			}
-		}
-		
-		return null;
-	}
+    abstract public function get(string $key): mixed;
+
+    /**
+     * Modifie une valeur du tableau des paramètres
+     * 
+     * @param string $key
+     * La vlé du tableau à modifier
+     * @param mixed $value
+     * La valeur à assigner
+     * @return void
+     * Ne retourne aucune valeur
+     */
+    abstract public function set(string $key, mixed $value): void;
 
 	/**
-	 * 
-	 * 
-	 * @param string $key = null, index du tableau dont la valeur est à retourner
-	 * 
-	 * @return bool
-	 */
-	public function set(string $key, mixed $value): bool
-	{
-		if(array_key_exists($key, $this->vars)) {
-			$this->vars[$key] = $value;
-			return true;
-		}
+     * Vérifie si une clé existe dans le tableau des paramètres
+     * 
+     * @param mixed $offset
+     * La clé à analyser
+     * @return bool
+     * Cette fonction retourne true en cas de succès ou false si une erreur survient.
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->vars[$offset]);
+    }
 
-		return false;
-	}
+	/**
+     * Retourne la valeur d'un index dans le tableau des paramètres
+     * 
+     * @param mixed $offset
+     * La clé du tableau dont la valeur est à retourner
+     * @return mixed
+     * Retourne une valeur ou null si l'index du tableau n'existe pas.
+     */
+    public function offsetGet(mixed $offset): mixed
+    {
+       return $this->offsetExists($offset) ? $this->vars[$offset] : null;
+    }
+
+	/**
+     * Ajoute ou modifie la valeur d'un index dans le tableau des paramètres
+     * 
+     * @param mixed $offset
+     * La clé du tableau dont la valeur est à modifier
+     * @param mixed $value
+     * La valeur à assigner
+     * @return void
+     * Ne retourne pas de valeur
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->vars[$offset] = $value;
+    }
+
+	/**
+     * Supprime une variable dans le tableau des paramètres
+     * 
+     * @param mixed $offset
+     * La clé du tableau qui est à supprimer
+     * @return void
+     * Ne retourne pas de valeur
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        //throw new \ErrorException("");
+        // unset($this->vars[$offset]);
+    }
 
 }
