@@ -254,11 +254,9 @@ class InstallationManager
             (object) array('name' => "layout.html", 'dir' => self::$forlders['templates']),
             (object) array('name' => "style.css",   'dir' => self::$forlders['css']),
             (object) array('name' => "java.js",     'dir' => self::$forlders['js']),
-            (object) array('name' => "app.json",    'dir' => self::$forlders['backConf']),
-            (object) array('name' => "app.json",    'dir' => self::$forlders['frontConf']),
             (object) array('name' => "index.html",  'dir' => self::$forlders['frontView']),
 
-            (object) array('name' => "db.json",                 'dir' => self::$forlders['config'],     'pattern' => $dbPatttern,       'replacement' => $dbReplacement),
+            (object) array('name' => "conf.json",               'dir' => self::$forlders['config'],     'pattern' => $dbPatttern,       'replacement' => $dbReplacement),
             (object) array('name' => "link.json",               'dir' => self::$forlders['config'],     'pattern' => "#{{ url }}#",     'replacement' => self::$url),
             (object) array('name' => ".htaccess",               'dir' => self::$forlders['public'],     'pattern' => "#{{ url }}#",     'replacement' => self::$url),
             (object) array('name' => "app.php",                 'dir' => self::$forlders['public'],     'pattern' => "#{{ appName }}#", 'replacement' => self::$appName),
