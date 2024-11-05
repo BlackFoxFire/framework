@@ -1,7 +1,7 @@
 {
     "name": "blackfox/mamba",
-    "description": "Le framework Mamba",
-    "keywords": ["framework", "laravel"],
+    "description": "Le framework Blackfox",
+    "keywords": ["blackfox", "framework"],
     "type": "framework",
     "require": {
         "php": "^8.2",
