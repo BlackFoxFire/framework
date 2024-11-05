@@ -1,9 +1,10 @@
 {
     "name": "blackfox/mamba",
-    "description": "Petit framework php simple et lèger",
-    "type": "library",
+    "description": "Le framework Mamba",
+    "keywords": ["framework", "laravel"],
+    "type": "framework",
     "require": {
-        "php": "^8.0",
+        "php": "^8.2",
         "composer": "^2.6",
         "twig/twig": "^3.14"
     },
@@ -18,5 +19,8 @@
             "name": "Christophe Dufour",
             "email": "blackfox@proximus.be"
         }
-    ]
+    ],
+    "require-dev": {
+        "symfony/var-dumper": "^7.1"
+    }
 }
