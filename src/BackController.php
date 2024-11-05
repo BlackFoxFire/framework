@@ -11,6 +11,10 @@
 
 namespace Blackfox\Mamba;
 
+use Blackfox\Mamba\Views\View;
+use Blackfox\Mamba\Database\Managers;
+use Blackfox\Mamba\Database\PDOFactory;
+
 abstract class BackController extends ApplicationComponent
 {
 	/*
@@ -37,7 +41,12 @@ abstract class BackController extends ApplicationComponent
 	{
 		parent::__construct($application);
 		
-		$this->managers = new Managers("PDO", PDOFactory::mysqlConnexion($this->app->config()['database']), $this->app->appName());
+		$dbname = $this->app->config()['database']['dbname'];
+		$username = $this->app->config()['database']['username'];
+		$password = $this->app->config()['database']['password'];
+		$bdInstance = PDOFactory::dbConnection($dbname, $username, $password);
+
+		$this->managers = new Managers($this->app, "PDO", $bdInstance);
 		$this->view = new View($application, $controller);
 
 		$this->setController($controller);

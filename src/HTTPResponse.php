@@ -11,6 +11,8 @@
 
 namespace Blackfox\Mamba;
 
+use Blackfox\Mamba\Views\View;
+
 class HTTPResponse extends ApplicationComponent
 {
 	/*

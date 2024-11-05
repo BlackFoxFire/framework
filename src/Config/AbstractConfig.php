@@ -4,12 +4,15 @@
  * AbstractConfig.php
  * @Auteur : Christophe Dufour
  * 
- * Cette classe mets en scène une configuration
+ * Cette classe représentant un tableau avec des paramètres de configuration
  */
 
-namespace Blackfox\Mamba;
+namespace Blackfox\Mamba\Config;
 
-use Blackfox\Mamba\Enums\ConfigValue;
+use Blackfox\Mamba\Application;
+use Blackfox\Mamba\ApplicationComponent;
+use Blackfox\Mamba\Exceptions\BadConfigParamException;
+use Blackfox\Mamba\Exceptions\BadConfigOperationException;
 
 abstract class AbstractConfig extends ApplicationComponent implements \ArrayAccess
 {
@@ -27,8 +30,9 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
      * Constructeur
      * 
      * @param Application $app
+     * Instance de l'application
      */
-    public function __construct(Application $app)
+    protected function __construct(Application $app)
     {
         parent::__construct($app);
     }
@@ -86,16 +90,15 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
 	}
 
 	/**
-	 * Crée la structure du tableau des paramètres de configuration et l'enregistre dans un fichier json
+	 * Crée la structure du tableau des paramètres
 	 * 
      * @param array $vars
      * [Optional]
      * Tableau contenant les paramètres de configuration
-     * 
-	 * @return int|false
-     * Retourne le nombre d'octets écrits, ou false si une erreur survient
+	 * @return void
+     * Ne retourne aucune valeur
 	 */
-	abstract public function create(array $vars = []): int|false;
+	abstract public function create(array $vars = []): void;
 
     /**
 	 * Ecrit un fichier de paramètres au format json
@@ -110,97 +113,63 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
 	}
 
     /**
-     * Vérifie si une clé existe dans le tableau des paramètres
-     * 
-     * @param string $key
-     * La clé à analyser
-     * @param ConfigValue $index
-     * [Optional]
-     * Sous tableau où l'analyse doit se faire
-     * 
-     * @return bool
-     * Retourne true en cas de succès, sinon false
-     */
-    public function exists(string $key, ConfigValue $index = ConfigValue::Frontend): bool
-    {
-        return array_key_exists($key, $this->vars[$index->value]);
-    }
-
-    /**
-	 * Retourne une valeur du tableau des paramètres
-	 * 
-	 * @param string $key
-     * La clé du tableau dont la valeur est à retourner
-	 * @return mixed
-     * Retourne une valeur
-	 */
-    abstract public function get(string $key): mixed;
-
-    /**
-     * Modifie une valeur du tableau des paramètres
-     * 
-     * @param string $key
-     * La vlé du tableau à modifier
-     * @param mixed $value
-     * La valeur à assigner
-     * @return void
-     * Ne retourne aucune valeur
-     */
-    abstract public function set(string $key, mixed $value): void;
-
-	/**
-     * Vérifie si une clé existe dans le tableau des paramètres
+     * Vérifie l'existence d'une variable dans le tableau des paramètres
      * 
      * @param mixed $offset
      * La clé à analyser
      * @return bool
-     * Cette fonction retourne true en cas de succès ou false si une erreur survient.
+     * Retourne true si la variable existe, sinon false
      */
     public function offsetExists(mixed $offset): bool
     {
         return isset($this->vars[$offset]);
     }
 
-	/**
-     * Retourne la valeur d'un index dans le tableau des paramètres
+    /**
+     * Retourne la valeur d'une variable du tableau des paramètres
      * 
      * @param mixed $offset
      * La clé du tableau dont la valeur est à retourner
      * @return mixed
-     * Retourne une valeur ou null si l'index du tableau n'existe pas.
+     * Retourne une valeur ou null si l'index du tableau n'existe pas
+     * @throws BadConfigParamExecption
+     * Lance une exection BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
      */
     public function offsetGet(mixed $offset): mixed
     {
-       return $this->offsetExists($offset) ? $this->vars[$offset] : null;
+        if(!$this->offsetExists($offset)) {
+            throw new BadConfigParamException("Paramètre de configuration inexistant.");
+        }
+
+        return $this->vars[$offset];
     }
 
-	/**
-     * Ajoute ou modifie la valeur d'un index dans le tableau des paramètres
+    /**
+     * Ajoute ou modifie une variable du tableau des paramètres
      * 
-     * @param mixed $offset
-     * La clé du tableau dont la valeur est à modifier
+     * @param string $offset
+     * La clé du tableau à modifier
      * @param mixed $value
      * La valeur à assigner
      * @return void
-     * Ne retourne pas de valeur
+     * Ne retourne aucune valeur
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->vars[$offset] = $value;
     }
 
-	/**
-     * Supprime une variable dans le tableau des paramètres
+    /**
+     * Supprime une variable du tableau des paramètres
      * 
      * @param mixed $offset
-     * La clé du tableau qui est à supprimer
+     * La clé du tableau à supprimer
      * @return void
      * Ne retourne pas de valeur
      */
     public function offsetUnset(mixed $offset): void
     {
-        //throw new \ErrorException("");
-        // unset($this->vars[$offset]);
+        throw new BadConfigOperationException("Opération interdite! Vous ne pouvez pas effacer un paramètre de configuration.");
     }
-
+    
 }

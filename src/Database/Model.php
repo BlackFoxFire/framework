@@ -1,15 +1,13 @@
 <?php
 
-/*
-*
-* Model.php
-* @Auteur : Christophe Dufour
-*
-* Classe de base pour tous les modeles de l'application.
-*
-*/
+/**
+ * Model.php
+ * @Auteur: Christophe Dufour
+ * 
+ * Classe de base pour tous les modèles de l'application
+ */
 
-namespace Blackfox\Mamba;
+namespace Blackfox\Mamba\Database;
 
 abstract class Model
 {
@@ -19,14 +17,14 @@ abstract class Model
 	*/
 	
 	// Lien avec la base de données
-	protected \PDO $dao;
+	protected mixed $dao;
 	protected string $table;
 	
 	/*
 		Constructeur
 		------------
 	*/
-	public function __construct(\PDO $dao)
+	public function __construct(mixed $dao)
 	{
 		$this->dao = $dao;
 		$this->table = $this->deductTableName();

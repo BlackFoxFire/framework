@@ -1,22 +1,23 @@
 <?php
 
-/*
-*
-* BackController.php
-* @Auteur : Christophe Dufour
-*
-* Controleur de base pour tous les controleurs d'une application.
-*
-*/
+/**
+ * BackController.php
+ * @Auteur: Christophe Dufour
+ * 
+ * Controleur de base pour tous les controleurs d'une application.
+ */
 
-namespace Blackfox\Mamba;
+namespace Blackfox\Mamba\Views;
+
+use Blackfox\Mamba\Application;
+use Blackfox\Mamba\ApplicationComponent;
+use Blackfox\Mamba\Config\Link;
 
 class View extends ApplicationComponent
 {
-	/*
-		Les attributs
-		-------------
-	*/
+	/**
+	 * Propriétes
+	 */
 	
 	// Tableau des chemins ou sont stoqués les templates
 	protected array $path = [];
@@ -27,10 +28,14 @@ class View extends ApplicationComponent
 	// Les données à remplacer dans les templates
 	protected array $data = [];
 	
-	/*
-		Constructeur
-		------------
-	*/
+	/**
+	 * Constructeur
+	 * 
+	 * @param Application $application
+	 * Instance de l'application
+	 * @param string $controller
+	 * Controlleur où le traitement a eu lieu
+	 */
 	public function __construct(Application $application, string $controller = null)
 	{
 		parent::__construct($application);
@@ -50,13 +55,19 @@ class View extends ApplicationComponent
 		$data[] = $this->app->rootDir() . DIRECTORY_SEPARATOR . "html" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR;
 		$this->path = $data;
 	}
+
+	/**
+	 * Setters
+	 */
 	
-	/*
-		Les setters
-		-----------
-	*/
-	
-	// Modifie la valeur de l'attribut $path
+	/**
+	 * Modifie la valeur de $path
+	 * 
+	 * @param array $path
+	 * Dossier où les templates sont à rechercher
+	 * @return void
+	 * Ne retourne aucune valeur
+	 */
 	public function setPath(array $path): void
 	{
 		if(empty($path)) {
@@ -66,7 +77,14 @@ class View extends ApplicationComponent
 		$this->path = $path;
 	}
 	
-	// Modifie la valeur de l'attribut $viewFile
+	/**
+	 * Modifie la valeur $viewFile
+	 * 
+	 * @param string $viewFile
+	 * La vue qu'il faudra afficher
+	 * @return void
+	 * Ne retourne aucune valeur
+	 */
 	public function setViewFile(string $viewFile): void
 	{
 		if(!is_string($viewFile) || empty($viewFile)) {
@@ -76,7 +94,17 @@ class View extends ApplicationComponent
 		$this->viewFile = $viewFile;
 	}
 	
-	// Ajoute un variable de page
+	/**
+	 * Ajoute une variable de template
+	 * 
+	 * @param mixed $data
+	 * La variable ou un tableeau de pair variable - valeur à ajouter au template
+	 * @param mixed $value
+	 * [Optional]
+	 * La valeur de la variable à ajouter
+	 * @return void
+	 * Ne retourne aucune valeur
+	 */
 	public function setData(mixed $data, mixed $value = null): void
 	{
 		if(is_array($data)) {
@@ -96,12 +124,16 @@ class View extends ApplicationComponent
 		}
 	}
 	
-	/*
-		Les méthodes
-		------------
-	*/
+	/**
+	 * Méthodes
+	 */
 
-	// Retourne la vue à afficher
+	/**
+	 * Retourne la vue à afficher
+	 * 
+	 * @return mixed
+	 * Retourne divers types de valeur
+	 */
 	public function render(): mixed
 	{
 		$fileExists = false;
@@ -119,8 +151,8 @@ class View extends ApplicationComponent
 		
 		$this->data['user'] = $this->app->user();
 
-		if($this->app->link()->get()) {
-			$this->setData($this->app->link()->get());
+		if($links = Link::getInstance($this->app())->vars()) {
+			$this->setData($links);
 		}
 		
 		$loader = new \Twig\Loader\FilesystemLoader($this->path);

@@ -1,16 +1,17 @@
 <?php
 
-/*
-*
-* Application.php
-* @Auteur : Christophe Dufour
-*
-* Classe modélisant une application html avec
-* ses requêtes et ses réponces.
-*
-*/
+/**
+ * Application.php
+ * @Auteur: Christophe Dufour
+ * 
+ * Classe modélisant une application html avec ses requêtes et ses réponces.
+ */
 
 namespace Blackfox\Mamba;
+
+use Blackfox\Mamba\User\User;
+use Blackfox\Mamba\Config\Config;
+use Blackfox\Mamba\Config\Link;
 
 abstract class Application
 {
@@ -51,8 +52,8 @@ abstract class Application
 		$this->httpRequest = new HTTPRequest($this);
 		$this->httpResponse = new HTTPResponse($this);
 		$this->user = new User($this);
-		$this->config = new Config($this);
-		$this->link = new Link($this);
+		$this->config = Config::getInstance($this);
+		$this->link = Link::getInstance($this);
 	}
 	
 	/*

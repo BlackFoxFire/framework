@@ -5,9 +5,9 @@
  * @Auteur: Christophe Dufour
  */
 
-namespace Blackfox\Mamba\Enums;
+namespace Blackfox\Mamba\Config\Enums;
 
-enum ConfigValue: string
+enum ConfigEnum: string
 {
     case Database = "database";
     case Global = "global";

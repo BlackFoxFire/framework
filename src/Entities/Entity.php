@@ -1,17 +1,15 @@
 <?php
 
-/*
-*
-* Entity.php
-* @Auteur : Christophe Dufour
-*
-* Classe de base pour toutes les entités.
-*
-*/
+/**
+ * Entity.php
+ * @Auteur: Christophe Dufour
+ * 
+ * Classe de base pour toutes les entités.
+ */
 
-namespace Blackfox\Mamba;
+namespace Blackfox\Mamba\Entities;
 
-use Blackfox\Mamba\Traits\Hydrator;
+use Blackfox\Mamba\Entities\Traits\Hydrator;
 
 abstract class Entity
 {
