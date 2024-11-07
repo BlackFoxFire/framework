@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<routes>
-	<route url="{{ url }}" controller="Example" action="index" ></route>
-</routes>

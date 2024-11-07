@@ -1,5 +1,0 @@
-{
-    "url_css": "{{ url }}css/style.css",
-    "url_js": "{{ url }}js/java.js",
-    "url_index": "{{ url }}"
-}
