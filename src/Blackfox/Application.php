@@ -187,7 +187,7 @@ abstract class Application
 		}
 		
 		$_GET = array_merge($_GET, $matchedRoute->vars());
-		$controllerClass = $this->nameSpace . "\\Controllers\\" . $matchedRoute->controller() . DIRECTORY_SEPARATOR . $matchedRoute->controller() . "Controller";
+		$controllerClass = $this->nameSpace . "\\Controllers\\" . $matchedRoute->controller() . "\\" . $matchedRoute->controller() . "Controller";
 		
 		return new $controllerClass($this, $matchedRoute->controller(), $matchedRoute->method());
 	}
