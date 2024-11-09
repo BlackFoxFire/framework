@@ -10,8 +10,10 @@
 namespace Blackfox;
 
 use Blackfox\User\User;
-use Blackfox\Config\Config;
 use Blackfox\Config\Link;
+use Blackfox\Config\Config;
+use Blackfox\Router\Router;
+use Blackfox\Exceptions\InvalidRouteException;
 
 abstract class Application
 {
@@ -175,37 +177,19 @@ abstract class Application
 	 */
 	public function getController(): BackController
 	{
-		$router = new Router;
-		
-		$xml = new \DOMDocument;
-		$xml->load(str_replace('/', DIRECTORY_SEPARATOR, $this->appDir() . "/config/routes.xml"));
-		
-		$routes = $xml->getElementsByTagName("route");
-		
-		foreach($routes as $route) {
-			$vars = array();
-			
-			if ($route->hasAttribute('vars')) {
-				$vars = explode(',', $route->getAttribute('vars'));
-			}
-			
-			$router->setRoutes(new Route($route->getAttribute('url'), $route->getAttribute('controller'),
-																		$route->getAttribute('action'), $vars));
-		}
-		
+		require_once $this->appDir . str_replace("/", DIRECTORY_SEPARATOR, "/routes/routes.php");
+
 		try {
-			$matchedRoute = $router->getRoute($this->httpRequest->requestURI());
+			$matchedRoute = Router::getRoute($this->httpRequest->requestURI());
 		}
-		catch (\RuntimeException $e) {
-			if ($e->getCode() == Router::NO_ROUTE) {
-				$this->httpResponse->redirect404();
-			}
+		catch (InvalidRouteException $e) {
+			$this->httpResponse->redirect404();
 		}
 		
 		$_GET = array_merge($_GET, $matchedRoute->vars());
 		$controllerClass = $this->nameSpace . "\\Controllers\\" . $matchedRoute->controller() . DIRECTORY_SEPARATOR . $matchedRoute->controller() . "Controller";
 		
-		return new $controllerClass($this, $matchedRoute->controller(), $matchedRoute->action());
+		return new $controllerClass($this, $matchedRoute->controller(), $matchedRoute->method());
 	}
 	
 	/**
