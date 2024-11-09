@@ -45,7 +45,7 @@ class Link extends AbstractConfig implements LinkInterface
     {
         parent::__construct($application);
 
-        $this->filename = $this->app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "link.json";
+        $this->filename = $this->app->rootDir() . str_replace('/', DIRECTORY_SEPARATOR, "/config/link.json");
 
         if(!$this->load()) {
 			$this->create();

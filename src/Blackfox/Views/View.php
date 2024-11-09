@@ -45,11 +45,6 @@ class View extends ApplicationComponent
 		
 		if(!empty($controller)) {
 			if(is_string($controller)) {
-				//$data[] = $this->app->appDir() . "App" . DIRECTORY_SEPARATOR . $this->app->name() . DIRECTORY_SEPARATOR . "Modules" . DIRECTORY_SEPARATOR . 
-				//			$controller . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR;
-				//$data[] = $this->app->appDir() . DIRECTORY_SEPARATOR . $this->app->name() . DIRECTORY_SEPARATOR . "Modules" . DIRECTORY_SEPARATOR . 
-				//			$controller . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR;
-
 				$data[] = $this->app->appDir() . str_replace("/", DIRECTORY_SEPARATOR, "/Controllers/$controller/views/");
 			}
 			else {

@@ -46,7 +46,7 @@ class Config extends AbstractConfig implements ConfigInterface
     {
         parent::__construct($application);
 
-        $this->filename = $this->app->rootDir() . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "conf.json";
+        $this->filename = $this->app->rootDir() . str_replace('/', DIRECTORY_SEPARATOR, "/config/conf.json");
 
         if(!$this->load()) {
 			$this->create();
