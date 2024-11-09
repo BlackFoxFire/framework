@@ -87,6 +87,17 @@ abstract class Application
 	}
 
 	/**
+	 * Retourne la valeur de $nameSpace
+	 * 
+	 * @return string
+	 * Retourne une chaine de caractère
+	 */
+	public function nameSpace(): string
+	{
+		return $this->nameSpace;
+	}
+
+	/**
 	 * Retourne la valeur de $name
 	 * 
 	 * @return string
