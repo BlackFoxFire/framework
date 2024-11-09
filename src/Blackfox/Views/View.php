@@ -34,25 +34,30 @@ class View extends ApplicationComponent
 	 * @param Application $application
 	 * Instance de l'application
 	 * @param string $controller
+	 * [Optionnel]
 	 * Controlleur où le traitement a eu lieu
 	 */
 	public function __construct(Application $application, string $controller = null)
 	{
 		parent::__construct($application);
 		
-		$data[] = $this->app->rootDir() . DIRECTORY_SEPARATOR . "html" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR;
+		$data[] = $this->app->rootDir() . str_replace("/", DIRECTORY_SEPARATOR , "/html/templates/");
 		
 		if(!empty($controller)) {
 			if(is_string($controller)) {
-				$data[] = $this->app->appDir() . "App" . DIRECTORY_SEPARATOR . $this->app->name() . DIRECTORY_SEPARATOR . "Modules" . DIRECTORY_SEPARATOR . 
-							$controller . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR;
+				//$data[] = $this->app->appDir() . "App" . DIRECTORY_SEPARATOR . $this->app->name() . DIRECTORY_SEPARATOR . "Modules" . DIRECTORY_SEPARATOR . 
+				//			$controller . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR;
+				//$data[] = $this->app->appDir() . DIRECTORY_SEPARATOR . $this->app->name() . DIRECTORY_SEPARATOR . "Modules" . DIRECTORY_SEPARATOR . 
+				//			$controller . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR;
+
+				$data[] = $this->app->appDir() . str_replace("/", DIRECTORY_SEPARATOR, "/Controllers/$controller/views/");
 			}
 			else {
 				throw new \InvalidArgumentException("Le controller doit être une chaine de caractères valide");
 			}
 		}
 		
-		$data[] = $this->app->rootDir() . DIRECTORY_SEPARATOR . "html" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR;
+		$data[] = $this->app->rootDir() . str_replace("/", DIRECTORY_SEPARATOR , "/html/errors/");
 		$this->path = $data;
 	}
 
@@ -100,7 +105,7 @@ class View extends ApplicationComponent
 	 * @param mixed $data
 	 * La variable ou un tableeau de pair variable - valeur à ajouter au template
 	 * @param mixed $value
-	 * [Optional]
+	 * [Optionnel]
 	 * La valeur de la variable à ajouter
 	 * @return void
 	 * Ne retourne aucune valeur
@@ -160,4 +165,5 @@ class View extends ApplicationComponent
 		
 		return $twig->render($this->viewFile . $this->ext, $this->data);
 	}
+	
 }

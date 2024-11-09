@@ -4,7 +4,7 @@
  * ApplicationComponent.php
  * @Auteur: Christophe Dufour
  * 
- * Classe de base pour les composantes de l'application.
+ * Classe de base pour les composantes de l'application
  */
 
 namespace Blackfox;
@@ -36,8 +36,8 @@ abstract class ApplicationComponent
 	/**
 	 * Retourne la valeur de $app
 	 * 
-	 * @return Application
-	 * Retourne une instance de l'application
+	 * @return Application 
+	 * Retourne un objet Blackfox\Application
 	 */
 	public function app(): Application
 	{

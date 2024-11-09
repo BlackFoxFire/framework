@@ -41,7 +41,7 @@ class Managers
 	{
 		$this->api = $api;
 		$this->dao = $dao;
-		$this->appName = $app->appName();
+		//$this->appName = $app->appName();
 	}
 	
 	/**
@@ -67,7 +67,9 @@ class Managers
 		}
 		
 		if(!isset($this->managers[$model])) {
-			$manager = '\\' . $this->appName . "\\Lib\\Models\\" . $model . "Model" .  $this->api;
+			//$manager = '\\' . $this->appName . "\\Lib\\Models\\" . $model . "Model" .  $this->api;
+			//$manager = $this->appName . "\\Models\\" . $model . "Model" .  $this->api;
+			$manager = "Lib\Models\\" . $model . "Model" .  $this->api;
 			
 			$this->managers[$model] = new $manager($this->dao);
 		}

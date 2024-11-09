@@ -93,7 +93,7 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
 	 * Crée la structure du tableau des paramètres
 	 * 
      * @param array $vars
-     * [Optional]
+     * [Optionnel]
      * Tableau contenant les paramètres de configuration
 	 * @return void
      * Ne retourne aucune valeur

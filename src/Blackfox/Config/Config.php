@@ -89,7 +89,7 @@ class Config extends AbstractConfig implements ConfigInterface
      * @param mixed $value
      * La valeur à assigner
      * @param ConfigEnum
-     * [Optional]
+     * [Optionnel]
      * Sous tableau où l'analyse doit se faire
 	 * @return void
      * Ne retourne aucune valeur
@@ -105,7 +105,7 @@ class Config extends AbstractConfig implements ConfigInterface
      * @param string $key
      * La clé à analyser
      * @param ConfigEnum $index
-     * [Optional]
+     * [Optionnel]
      * Sous tableau où l'analyse doit se faire
      * 
      * @return bool
@@ -122,7 +122,7 @@ class Config extends AbstractConfig implements ConfigInterface
 	 * @param string $key
      * La clé du tableau dont la valeur est à retourner
      * @param ConfigEnum $index
-     * [Optional]
+     * [Optionnel]
      * Sous tableau où l'analyse doit se faire
 	 * @return mixed
      * Retourne un tableau ou une valeur en cas de succès.

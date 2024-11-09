@@ -30,7 +30,7 @@ class PDOFactory extends DBFactory
      * @return void
 	 * Ne retourne aucune valeur
      */
-	protected static function createInstance(string $dbname, string $username, string $password): void
+	protected static function dbConnection(string $dbname, string $username, string $password): void
 	{
 		self::$instance = new \PDO("mysql:host=localhost;dbname=" . $dbname, $username, $password);
 		self::$instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

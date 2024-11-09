@@ -16,21 +16,22 @@ abstract class Entity
 	// Utilisation du trait Hydrator
 	use Hydrator;
 	
-	/*
-		Les attributs
-		-------------
-	*/
+	/**
+	 * Propriétes
+	 */
 	
 	// Identifiant unique de l'entité
-	protected int|string $id;
-	
+	protected int $id;
 	// Tableau des éventuelles erreurs
 	protected array $errors = [];
 	
-	/*
-		Constructeur
-		------------
-	*/
+	/**
+	 * Constructeur
+	 * 
+	 * @param array $data
+	 * [Optionnel]
+	 * Un tableau associatif avec les nom des propriétés et leurs valeurs
+	 */
 	public function __construct(array $data = [])
 	{
 		if(!empty($data)) {
@@ -38,54 +39,83 @@ abstract class Entity
 		}
 	}
 	
-	/*
-		Les getters
-		-----------
-	*/
+	/**
+	 * Getters
+	 */
 	
-	// Retourne la valeur de l'attribut $id
+	/**
+	 * Retourne la valeur de $id
+	 * 
+	 * @return int
+	 * Retourne un entier positif non null
+	 */
 	public function id(): int
 	{
 		return $this->id;
 	}
 	
-	// Retourne la valeur de l'attribut $errors
+	/**
+	 * Retourne la valeur de $errors
+	 * 
+	 * @return array
+	 * Retourne un tableau
+	 */
 	public function errors(): array
 	{
 		return $this->errors;
 	}
 	
-	/*
-		Les setters
-		-----------
-	*/
+	/**
+	 * Setters
+	 */
 	
-	// Modifie la valeur de l'attribut $id
-	public function setId(int $value): void
+	/**
+	 * Modifie la valeur de $id
+	 * 
+	 * @param int $value
+	 * Identifiant unique de l'entité
+	 * @return void
+	 * Ne retourne aucune valeur
+	 */
+	public function setId(int $id): void
 	{
-		if(is_numeric($value) && (int) $value > 0) {
-			$this->id = (int) $value;
+		if($id > 0) {
+			$this->id = $id;
 		}
 	}
 	
-	/*
-		Les méthodes
-		------------
-	*/
+	/**
+	 * Méthodes
+	 */
 	
-	// Retourne true si il y a des erreurs. Sinon false
+	/**
+	 * Vérifie s'il y a des erreurs dans le tableau $errors
+	 * 
+	 * @return bool
+	 * Retourne true si il y a des erreurs, sinon false
+	 */
 	public function hasErrors(): bool
 	{
 		return !empty($this->errors);
 	}
 	
-	// Retourne true si c'est un nouvel objet. Sinon false
+	/**
+	 * Vérifie si c'est un nouvel objet
+	 * 
+	 * @return bool
+	 * Retourne true si c'est un nouvel objet, sinon false
+	 */
 	public function isNew(): bool
 	{
 		return empty($this->id);
 	}
 	
-	// Retourne true si l'objet est valide
+	/**
+	 * Vérifie si l'objet est valide
+	 * 
+	 * @return bool
+	 * Retourne true si l'objet est valide, sinon false
+	 */
 	abstract public function isValid(): bool;
 	
 }

@@ -11,39 +11,40 @@ namespace Blackfox\Database;
 
 abstract class Model
 {
-	/*
-		Les attributs
-		-------------
-	*/
+	/**
+	 * Propriétes
+	 */
 	
 	// Lien avec la base de données
 	protected mixed $dao;
-	protected string $table;
 	
-	/*
-		Constructeur
-		------------
-	*/
+	/**
+	 * Constructeur
+	 * 
+	 * @param mixed $dao
+	 * le lien avec la base de données
+	 */
 	public function __construct(mixed $dao)
 	{
 		$this->dao = $dao;
-		$this->table = $this->deductTableName();
-	}
-	
-	// Déduit le nom de la table en fonction du nom du model
-	protected function deductTableName(): string
-	{
-		$array = explode('\\', get_class($this));
-
-		return strtolower(str_replace("ModelPDO", "", $array[array_key_last($array)]));
+		//$this->table = $this->deductTableName();
 	}
 
-	/*
-		Les méthodes
-		------------
-	*/
-	
-	// Exécute une requête SQL
+	/**
+	 * Méthodes
+	 */
+
+	/**
+	 * Exécute une requête SQL
+	 * 
+	 * @param string $sql
+	 * La requête SQL à préparer et à exécuter
+	 * @param array $data
+	 * [Optionnel]
+	 * Ce tableau contient une ou plusieurs paires clé=>valeur pour définir les valeurs des attributs pour l'objet PDOStatement que cette méthode retourne
+	 * @return PDOStatement|false
+	 * Si la requête est un succès, un objet PDOStatement est retourné, sinon false.
+	 */
 	public function execute(string $sql, array $data = []): \PDOStatement|false
 	{
 		if(empty($data)) {
@@ -55,10 +56,17 @@ abstract class Model
 		return $request;
 	}
 
-	// Renvoie le nombre total d'enregistrement dans une table de la base de données
-	public function count(): int
+	/**
+	 * Renvoie le nombre total d'enregistrement dans une table
+	 * 
+	 * @param string $table
+	 * Le nom de la table
+	 * @return int
+	 * Retourne un entier qui représente le nombre total d'enregistrement dans une table
+	 */
+	public function count(string $table): int
 	{
-		$sql =  "SELECT COUNT(*) FROM {$this->table}";
+		$sql =  "SELECT COUNT(*) FROM $table";
 		
 		$request = $this->execute($sql);
 		$counter = $request->fetch()[0];
@@ -67,17 +75,27 @@ abstract class Model
 		return $counter;
 	}
 
-	// Retourne tous les enregistrements d'une table sous la forme d'un tableau associatif
-	// ou sous la forme d'une tableau d'objet
-	public function all(bool $fetchClass = false): array
+	/**
+	 * Retourne tous les enregistrements d'une table
+	 * 
+	 * @param string $table
+	 * Le nom de la table
+	 * @param sbool $fetchClass
+	 * [Optionnel]
+	 * Si true on retourne un tableau d'objet. Sinon c'est un tableau associatif
+	 * @return array
+	 * Retourne un tableau associatif ou un tableu d'objet
+	 */
+	public function getAll(string $table, bool $fetchClass = false): array
 	{
-		$sql = "SELECT * FROM {$this->table}";
+		$sql = "SELECT * FROM $table";
 		
 		$request = $this->execute($sql);
 		$fetchClass ? $request->setFetchMode(\PDO::FETCH_ASSOC) : $request->setFetchMode(\PDO::FETCH_CLASS);
-		$datas = $request->fetch();
+		$datas = $request->fetchAll();
 		$request->closeCursor();
 		
 		return $datas;
 	}
+	
 }

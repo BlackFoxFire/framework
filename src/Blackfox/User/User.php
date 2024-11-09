@@ -47,7 +47,7 @@ class User extends ApplicationComponent
 	 * @param string $key
 	 * La variable à ajouter ou modifier
 	 * @param mixed $value
-	 * [Optional]
+	 * [Optionnel]
 	 * La valeur à affecter à la variable
 	 * @return void
 	 * Ne retoune aucune valeur
@@ -76,7 +76,7 @@ class User extends ApplicationComponent
 	 * @param string $key
 	 * La variable à retouner
 	 * @param mixed $returnValue
-	 * [Optional]
+	 * [Optionnel]
 	 * Valeur de retour personnalisée en cas d'erreur
 	 * @return mixed
 	 * Peut retourner tout type de valeur.
@@ -121,7 +121,7 @@ class User extends ApplicationComponent
 	 * Modifie le statut d'authentification de l'utilisateur
 	 * 
 	 * @param bool $value
-	 * [Optional]
+	 * [Optionnel]
 	 * Si true, l'utilisateur s'est authentifié. False si c'est pas le cas.
 	 * @return void
 	 * Ne retourne aucune valeur
@@ -142,7 +142,7 @@ class User extends ApplicationComponent
 	 * @param string $value
 	 * Le message à l'attention de l'utilisateur
 	 * @param string bool $errorMessage
-	 * [Optional]
+	 * [Optionnel]
 	 * Si true, le message est un message d'erreur. False si c'est pas le cas.
 	 * @return void
 	 * Ne retourne aucune valeur
@@ -226,4 +226,5 @@ class User extends ApplicationComponent
 
 		return null;
 	}
+	
 }
