@@ -9,7 +9,7 @@
 
 namespace Blackfox;
 
-use Blackfox\Views\View;
+use Blackfox\View\View;
 
 class HTTPResponse extends ApplicationComponent
 {

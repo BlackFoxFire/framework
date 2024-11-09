@@ -9,7 +9,7 @@
 
 namespace Blackfox;
 
-use Blackfox\Views\View;
+use Blackfox\View\View;
 use Blackfox\Database\Managers;
 
 abstract class BackController extends ApplicationComponent
@@ -22,8 +22,8 @@ abstract class BackController extends ApplicationComponent
 	protected Managers $managers;
 	// Le nom du contrôleur actuel
 	protected string $controller = "";
-	// L'action à éxécuter
-	protected string $action = "";
+	// La méthode à éxécuter
+	protected string $method = "";
 	// Le nom du fichier vue à afficher
 	protected string $viewFile = "";
 	// La vue à afficher
@@ -36,18 +36,18 @@ abstract class BackController extends ApplicationComponent
 	 * Instance de l'application
 	 * @param string $controller
 	 * Contrôleur où l'on se trouve
-	 * @param string $action
+	 * @param string $method
 	 * La méthodes à appeler
 	 */
-	public function __construct(Application $app, string $controller, string $action)
+	public function __construct(Application $app, string $controller, string $method)
 	{
 		parent::__construct($app);
 
 		$this->setManager();
 		$this->view = new View($app, $controller);
 		$this->setController($controller);
-		$this->setAction($action);
-		$this->setViewFile($action);
+		$this->setMethod($method);
+		$this->setViewFile($method);
 	}
 	
 	/**
@@ -97,28 +97,28 @@ abstract class BackController extends ApplicationComponent
 	 */
 	public function setController(string $controller): void
 	{
-		if(!is_string($controller) || empty($controller)) {
-			throw new \InvalidArgumentException("Le controller doit être une chaine de caractères valide");
+		if(empty($controller)) {
+			throw new \ValueError("Le controller ne peut pas être une chaine de caractère vide");
 		}
 		
 		$this->controller = $controller;
 	}
 	
 	/**
-	 * Modifie la valeur de $action
+	 * Modifie la valeur de $method
 	 * 
-	 * @param string $action
+	 * @param string $method
 	 * La méthodes qu'il faudra appeler
 	 * @return void
 	 * Ne retourne aucune valeur
 	 */
-	public function setAction(string $action): void
+	public function setMethod(string $method): void
 	{
-		if(!is_string($action) || empty($action)) {
-			throw new \InvalidArgumentException("L'action doit être une chaine de caractères valide");
+		if(empty($method)) {
+			throw new \ValueError("La méthode ne peut pas être une chaine de caractère vide");
 		}
 		
-		$this->action = $action;
+		$this->method = $method;
 	}
 	
 	/**
@@ -131,8 +131,8 @@ abstract class BackController extends ApplicationComponent
 	 */
 	public function setViewFile(string $viewFile): void
 	{
-		if(!is_string($viewFile) || empty($viewFile)) {
-			throw new \InvalidArgumentException("La vue doit être une chaine de caractères valide");
+		if(empty($viewFile)) {
+			throw new \ValueError("La vue ne peut pas être une chaine de caractère vide");
 		}
 		
 		$this->viewFile = $viewFile;
@@ -144,17 +144,17 @@ abstract class BackController extends ApplicationComponent
 	 */
 	
 	/**
-	 * Exécute l'action demandée si celle-ci existe
+	 * Exécute la méthode demandée si celle-ci existe
 	 * 
 	 * @return void
 	 * Ne retourne aucune valeur
 	 */
 	public function execute(): void
 	{
-		$method = "execute" . ucfirst($this->action);
+		$method = "execute" . ucfirst($this->method);
 		
 		if(!is_callable(array($this, $method))) {
-			throw new \RuntimeException("L'action $this->action n'est pas définie sur ce controller");
+			throw new \RuntimeException("La méthode $this->method n'est pas définie sur ce controller");
 		}
 		
 		$this->$method($this->app->httpRequest());

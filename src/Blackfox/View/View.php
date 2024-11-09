@@ -7,7 +7,7 @@
  * Controleur de base pour tous les controleurs d'une application.
  */
 
-namespace Blackfox\Views;
+namespace Blackfox\View;
 
 use Blackfox\Application;
 use Blackfox\ApplicationComponent;
@@ -42,40 +42,18 @@ class View extends ApplicationComponent
 		parent::__construct($application);
 		
 		$data[] = $this->app->rootDir() . str_replace("/", DIRECTORY_SEPARATOR , "/html/templates/");
+		$data[] = $this->app->rootDir() . str_replace("/", DIRECTORY_SEPARATOR , "/html/errors/");
 		
 		if(!empty($controller)) {
-			if(is_string($controller)) {
-				$data[] = $this->app->appDir() . str_replace("/", DIRECTORY_SEPARATOR, "/Controllers/$controller/views/");
-			}
-			else {
-				throw new \InvalidArgumentException("Le controller doit être une chaine de caractères valide");
-			}
+			$data[] = $this->app->appDir() . str_replace("/", DIRECTORY_SEPARATOR, "/Controllers/$controller/views/");
 		}
 		
-		$data[] = $this->app->rootDir() . str_replace("/", DIRECTORY_SEPARATOR , "/html/errors/");
 		$this->path = $data;
 	}
 
 	/**
 	 * Setters
 	 */
-	
-	/**
-	 * Modifie la valeur de $path
-	 * 
-	 * @param array $path
-	 * Dossier où les templates sont à rechercher
-	 * @return void
-	 * Ne retourne aucune valeur
-	 */
-	public function setPath(array $path): void
-	{
-		if(empty($path)) {
-			throw new \InvalidArgumentException("Le chemin spécifié est invalide.");
-		}
-		
-		$this->path = $path;
-	}
 	
 	/**
 	 * Modifie la valeur $viewFile
@@ -87,8 +65,8 @@ class View extends ApplicationComponent
 	 */
 	public function setViewFile(string $viewFile): void
 	{
-		if(!is_string($viewFile) || empty($viewFile)) {
-			throw new \InvalidArgumentException("La vue spécifiée est invalide.");
+		if(empty($viewFile)) {
+			throw new \ValueError("La vue spécifiée est invalide");
 		}
 		
 		$this->viewFile = $viewFile;
@@ -109,18 +87,20 @@ class View extends ApplicationComponent
 	{
 		if(is_array($data)) {
 			if(empty($data)) {
-				throw new \InvalidArgumentException("Le tableau des variables doit être non nul.");
+				throw new \ValueError("Le tableau des variables ne doit pas être nul");
 			}
 			
 			$this->data = array_merge($this->data, $data);
 		}
-		else {
-			if(!is_string($data) || empty($data)) {
-				throw new \InvalidArgumentException(
-									'Le nom de la variable doit être une chaine de caractères non nulle');
+		elseif(is_string($data)) {
+			if(empty($data)) {
+				throw new \ValueError('Le nom de la variable ne doit pas être une chaine de caractères vide');
 			}
 			
 			$this->data[$data] = $value;
+		}
+		else {
+			throw new \InvalidArgumentException('Le nom de la variable doit être une chaine de caractères valide');
 		}
 	}
 	
@@ -145,7 +125,7 @@ class View extends ApplicationComponent
 			}
 		}
 		
-		if (!$fileExists) {
+		if(!$fileExists) {
 			throw new \RuntimeException("La vue spécifiée n'existe pas.");
 		}
 		
