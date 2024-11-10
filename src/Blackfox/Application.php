@@ -14,6 +14,7 @@ use Blackfox\Config\Link;
 use Blackfox\Config\Config;
 use Blackfox\Router\Router;
 use Blackfox\Exceptions\InvalidRouteException;
+use Blackfox\Handler\ErrorHandler;
 
 abstract class Application
 {
@@ -60,6 +61,8 @@ abstract class Application
 		$this->user = new User($this);
 		$this->config = Config::getInstance($this);
 		$this->link = Link::getInstance($this);
+
+		ErrorHandler::init($this);
 	}
 	
 	/**
@@ -168,7 +171,7 @@ abstract class Application
 	/**
 	 * Méthodes
 	 */
-	
+
 	/**
 	 * Retourne le controleur à éxécuter
 	 * 
@@ -190,35 +193,6 @@ abstract class Application
 		$controllerClass = $this->nameSpace . "\\Controllers\\" . $matchedRoute->controller() . "\\" . $matchedRoute->controller() . "Controller";
 		
 		return new $controllerClass($this, $matchedRoute->controller(), $matchedRoute->method());
-	}
-	
-	/**
-	 * Fixe le niveau de rapport d'erreurs PHP
-	 * 
-	 * @param int $error_level
-	 * [Optionnel]
-	 * Le niveau de rapport d'erreurs
-	 * @return int
-	 * Retourne le niveau d'error_reporting, avnt qu'il ne soit changé en error_level
-	 */
-	protected function errorReporting(?int $error_level = null): int
-	{
-		return error_reporting($error_level);
-	}
-
-	/**
-	 * Active ou désactive les messages d'erreur
-	 * 
-	 * @param int $value
-	 * Un entier. 0 pour ne pas afficher les erreurs, 1 pour les afficher
-	 * @return void
-	 * Ne retourne pas de valeur
-	 */
-	protected function displayErrors(int $value = 1)
-	{
-		if(in_array($value, [0, 1])) {
-			ini_set("display_errors", $value);
-		}
 	}
 
 	/**
