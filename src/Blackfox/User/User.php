@@ -125,12 +125,13 @@ class User extends ApplicationComponent
 	 * Si true, l'utilisateur s'est authentifié. False si c'est pas le cas.
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws InvalidArgumentException
+	 * Lance une exception InvalidArgumentException le paramètre passé à cette méthode n'est pas un booléen
 	 */
 	public function setAuthenticated(bool $value = true): void
 	{
 		if(!is_bool($value)) {
-			throw new \InvalidArgumentException(
-				"La valeur spécifiée à la méthode User::setAuthenticated() doit être un boolean");
+			throw new \InvalidArgumentException("La valeur spécifiée à la méthode User::setAuthenticated() doit être un boolean");
 		}
 		
 		$_SESSION['isAuthenticated'] = $value;

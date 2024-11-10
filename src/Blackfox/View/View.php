@@ -62,6 +62,8 @@ class View extends ApplicationComponent
 	 * La vue qu'il faudra afficher
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws ValueError
+	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setViewFile(string $viewFile): void
 	{
@@ -82,6 +84,10 @@ class View extends ApplicationComponent
 	 * La valeur de la variable à ajouter
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws ValueError
+	 * Lance une exception ValueError si une des paramètre passé est vide
+	 * @throws InvalidArgumentException
+	 * Lance une exception InvalidArgumentException si le paramètre $data n'est pas un tableau ou une chaine de caractère
 	 */
 	public function setData(mixed $data, mixed $value = null): void
 	{
@@ -113,6 +119,8 @@ class View extends ApplicationComponent
 	 * 
 	 * @return mixed
 	 * Retourne divers types de valeur
+	 * @throws RuntimeException
+	 * Lance une exception RuntimeException si le fichier de vue n'existe pas
 	 */
 	public function render(): mixed
 	{

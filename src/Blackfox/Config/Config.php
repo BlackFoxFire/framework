@@ -125,7 +125,9 @@ class Config extends AbstractConfig implements ConfigInterface
      * [Optionnel]
      * Sous tableau où l'analyse doit se faire
 	 * @return mixed
-     * Retourne un tableau ou une valeur en cas de succès.
+     * Retourne un tableau ou une valeur en cas de succès
+     * @throws BadConfigParamException
+	 * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
 	 */
 	public function get(string $key, ConfigEnum $index = ConfigEnum::Frontend): mixed
 	{

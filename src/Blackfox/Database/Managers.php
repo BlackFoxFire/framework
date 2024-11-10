@@ -55,6 +55,10 @@ class Managers
 	 * Le modele demandé
 	 * @return mixed
 	 * Peut retourner plusieurs types d'objets
+	 * @throws NoConnectionException
+	 * Lance une NoConnectionException si on tente re récupérer un manageur sans connexion à une base de données
+	 * @throws ValueError
+	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function getManagerOf(string $model): mixed
 	{
@@ -62,8 +66,8 @@ class Managers
 			throw new NoConnectionException("Aucune connexion avec une base de données.");
 		}
 
-		if(!is_string($model) || empty($model)) {
-			throw new \InvalidArgumentException('Le module spécifié est invalide');
+		if(empty($model)) {
+			throw new \ValueError('Le module spécifié est invalide');
 		}
 		
 		if(!isset($this->managers[$model])) {

@@ -109,7 +109,7 @@ class Link extends AbstractConfig implements LinkInterface
 	 * @return mixed
      * Retourne un tableau ou une valeur en cas de succès.
      * @throws BadConfigParamExecption
-     * Lance une exection BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
+     * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
 	 */
 	public function get(string $key): mixed
 	{

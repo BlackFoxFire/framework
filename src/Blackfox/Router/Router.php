@@ -32,7 +32,7 @@ class Router
      * @return Route
      * Retourne un objet Balckfox\Route en cas de succès
      * @throws InvalidRouteException
-     * Lance une exection InvalidRouteException si une route n'existe pas
+     * Lance une exception InvalidRouteException si une route n'existe pas
      */
     public static function getRoute(string $url): Route
     {

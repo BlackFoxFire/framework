@@ -94,6 +94,8 @@ abstract class BackController extends ApplicationComponent
 	 * Contrôleur où le traitement se passe
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws ValueError
+	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setController(string $controller): void
 	{
@@ -111,6 +113,8 @@ abstract class BackController extends ApplicationComponent
 	 * La méthodes qu'il faudra appeler
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws ValueError
+	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setMethod(string $method): void
 	{
@@ -128,6 +132,8 @@ abstract class BackController extends ApplicationComponent
 	 * Le chemin vers le fichier de la vue qu'il faudra afficher
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws ValueError
+	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setViewFile(string $viewFile): void
 	{
@@ -148,6 +154,8 @@ abstract class BackController extends ApplicationComponent
 	 * 
 	 * @return void
 	 * Ne retourne aucune valeur
+	 * @throws RuntimeException
+	 * Lance une exception RuntimeException si la méthodes à appeler n'existe pas dans le controlleur
 	 */
 	public function execute(): void
 	{

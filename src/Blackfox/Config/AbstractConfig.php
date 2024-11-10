@@ -133,7 +133,7 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
      * @return mixed
      * Retourne une valeur ou null si l'index du tableau n'existe pas
      * @throws BadConfigParamExecption
-     * Lance une exection BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
+     * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -166,6 +166,8 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
      * La clé du tableau à supprimer
      * @return void
      * Ne retourne pas de valeur
+     * @throws BadConfigOperationException
+     * Lance une exception BadConfigOperationException si on tente d'effacer un paramètre de configuration
      */
     public function offsetUnset(mixed $offset): void
     {
