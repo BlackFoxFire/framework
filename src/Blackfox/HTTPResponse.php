@@ -77,7 +77,7 @@ class HTTPResponse extends ApplicationComponent
 	public function redirect404(): void
 	{
 		$this->view = new View($this->app);
-		$this->view->setViewFile("404");
+		$this->view->setViewFile("404Error");
 		
 		$this->addHeader('HTTP/1.0 404 Not Found');
 		$this->render();
