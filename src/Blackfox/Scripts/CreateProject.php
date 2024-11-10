@@ -29,7 +29,7 @@ class CreateProject
         foreach(self::$folders as $forder) {
             $dir = str_replace('/', DIRECTORY_SEPARATOR, $rootDir . $forder);
             if(!is_dir($dir)) {
-                mkdir($dir);
+                mkdir($dir, 0777, true);
             }
         }
     }
