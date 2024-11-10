@@ -77,9 +77,8 @@ class Router
     {
         $vars = [];
 
-        if(!empty($vars)) {
+        if(!empty($varsNames)) {
             $vars = explode(',', $varsNames);
-            var_dump($vars);
         }
 
         self::$routes[] = new Route($url, $controller, $method, $vars);
