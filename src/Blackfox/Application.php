@@ -14,7 +14,7 @@ use Blackfox\Config\Link;
 use Blackfox\Config\Config;
 use Blackfox\Database\DBManager;
 use Blackfox\Exceptions\InvalidRouteException;
-use Blackfox\Handler\ErrorHandler;
+use Blackfox\Handlers\ErrorHandler;
 use Blackfox\Router\Router;
 
 abstract class Application

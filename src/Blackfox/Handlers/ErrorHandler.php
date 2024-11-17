@@ -6,7 +6,7 @@
  * 
  */
 
-namespace Blackfox\Handler;
+namespace Blackfox\Handlers;
 
 use Blackfox\Application;
 use Blackfox\ApplicationComponent;
@@ -89,25 +89,25 @@ class ErrorHandler extends ApplicationComponent
     /**
      * Intercepte les exeptions lancées
      * 
-     * @param Throwable $e
+     * @param \Throwable $exception
      * Un execption implémentent l'interface Throwable
      * @return void
      * Ne retourne aucune valeur
      */
-    public function errorHandler(\Throwable $e): void
+    public function errorHandler(\Throwable $exception): void
     {
         $time = new \DateTime();
 
         $datas = array(
             'time' => $time->format("[Y-m-d à H:i]"),
-            'errorType' => get_class($e),
-            'file' => basename($e->getFile()),
-            'line' => $e->getLine(),
-            'message' => $e->getMessage()
+            'errorType' => get_class($exception),
+            'file' => basename($exception->getFile()),
+            'line' => $exception->getLine(),
+            'message' => $exception->getMessage()
         );
 
         $this->write($datas);
-        $this->display($e);
+        $this->display($exception);
     }
 
     /**
@@ -130,18 +130,18 @@ class ErrorHandler extends ApplicationComponent
     /**
      * Affiche une vue d'erreur
      * 
-     * @param Throwable $e
+     * @param \Throwable $exception
      * Un execption implémentent l'interface Throwable
      * @return void
 	 * Ne retourne aucune valeur
      */
-    protected function display(\Throwable $e): void
+    protected function display(\Throwable $exception): void
     {
         $view = new View($this->app);
 
         if($this->displayErrors()) {
             $view->setViewFile("detectedError");
-            $view->setData('error', $e);
+            $view->setData('error', $exception);
         }
         else {
             $view->setViewFile("unknownError");
