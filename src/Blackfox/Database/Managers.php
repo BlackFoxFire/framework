@@ -37,11 +37,10 @@ class Managers
 	 * @param mixed $dao
 	 * Le lien avec la base de données
 	 */
-	public function __construct(Application $app, string $api, mixed $dao)
+	public function __construct(string $api, mixed $dao)
 	{
 		$this->api = $api;
 		$this->dao = $dao;
-		//$this->appName = $app->appName();
 	}
 	
 	/**
@@ -71,8 +70,6 @@ class Managers
 		}
 		
 		if(!isset($this->managers[$model])) {
-			//$manager = '\\' . $this->appName . "\\Lib\\Models\\" . $model . "Model" .  $this->api;
-			//$manager = $this->appName . "\\Models\\" . $model . "Model" .  $this->api;
 			$manager = "Lib\Models\\" . $model . "Model" .  $this->api;
 			
 			$this->managers[$model] = new $manager($this->dao);
