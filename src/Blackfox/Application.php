@@ -12,9 +12,10 @@ namespace Blackfox;
 use Blackfox\User\User;
 use Blackfox\Config\Link;
 use Blackfox\Config\Config;
-use Blackfox\Router\Router;
+use Blackfox\Database\DBManager;
 use Blackfox\Exceptions\InvalidRouteException;
 use Blackfox\Handler\ErrorHandler;
+use Blackfox\Router\Router;
 
 abstract class Application
 {
@@ -40,6 +41,8 @@ abstract class Application
 	protected Config $config;
 	// Object contenant les liens de l'application
 	protected Link $link;
+	// Instance de la base de données
+	protected mixed $dbInstance;
 	
 	/**
 	 * Constructeur
@@ -61,7 +64,7 @@ abstract class Application
 		$this->user = new User($this);
 		$this->config = Config::getInstance($this);
 		$this->link = Link::getInstance($this);
-
+		$this->setDbInstance();
 		ErrorHandler::init($this);
 	}
 	
@@ -167,7 +170,38 @@ abstract class Application
 	{
 		return $this->link;
 	}
+
+	/**
+	 * Retourne la valeur de $dbInstance
+	 * 
+	 * @return mixed
+	 * Retourne une instance de base de données ou null si aucune connexion
+	 */
+	public function dbInstance(): mixed
+	{
+		return $this->dbInstance;
+	}
 	
+	/**
+	 * Setters
+	 */
+
+	/**
+	 * Modifie la valeur de $dbInstance
+	 * 
+	 * @return void
+	 * Ne retourne aucune valeur
+	 */
+	protected function setDbInstance(): void
+	{
+		$api = $this->config()['database']['api'];
+		$dbname = $this->config()['database']['dbname'];
+		$username = $this->config()['database']['username'];
+		$password = $this->config()['database']['password'];
+
+		$this->dbInstance = DBManager::get($api, $dbname, $username, $password);
+	}
+
 	/**
 	 * Méthodes
 	 */

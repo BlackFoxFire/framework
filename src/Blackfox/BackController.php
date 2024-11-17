@@ -9,8 +9,9 @@
 
 namespace Blackfox;
 
-use Blackfox\View\View;
+use Blackfox\Database\DBManager;
 use Blackfox\Database\Managers;
+use Blackfox\View\View;
 
 abstract class BackController extends ApplicationComponent
 {
@@ -78,13 +79,7 @@ abstract class BackController extends ApplicationComponent
 	protected function setManager(): void
 	{
 		$api = $this->app->config()['database']['api'];
-		$dbname = $this->app->config()['database']['dbname'];
-		$username = $this->app->config()['database']['username'];
-		$password = $this->app->config()['database']['password'];
-
-		$factoryName = "Blackfox\\Database\\" . $api . "Factory";
-		$bdInstance = $factoryName::getInstance($dbname, $username, $password);
-		$this->managers = new Managers($this->app, $api, $bdInstance);
+		$this->managers = new Managers($api, $this->app->dbInstance());
 	}
 	
 	/**
