@@ -1,13 +1,13 @@
 <?php
 
 /**
- * ConfigValue.php
+ * AreaConfigEnum.php
  * @Auteur: Christophe Dufour
  */
 
 namespace Blackfox\Config\Enums;
 
-enum ConfigEnum: string
+enum AreaConfigEnum: string
 {
     case Database = "database";
     case Global = "global";

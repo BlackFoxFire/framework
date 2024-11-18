@@ -10,39 +10,18 @@
 namespace Blackfox\Config;
 
 use Blackfox\Application;
-use Blackfox\Config\Enums\ConfigEnum;
+use Blackfox\Config\Enums\AreaConfigEnum;
 use Blackfox\Exceptions\BadConfigParamException;
-use Blackfox\Config\Interfaces\ConfigInterface;
 
-class Config extends AbstractConfig implements ConfigInterface
+class Config extends AbstractConfig
 {
-     // Instance de cette classe
-     private static ?self $instance = null;
-
-     /**
-     * Retourne l'instance de la classe Config
-     * 
-     * @param Application $application
-     * Instance de l'application
-     * @return self
-     * Retourne l'instance de cette classe
-     */
-    public static function getInstance(Application $application): self
-    {
-        if(is_null(self::$instance)) {
-            self::$instance = new self($application);
-        }
-
-        return self::$instance;
-    }
-
     /**
      * Constructeur
      * 
      * @param Application $application
      * Instance de l'application
      */
-    private function __construct(Application $application)
+    protected function __construct(Application $application)
     {
         parent::__construct($application);
 
@@ -94,7 +73,7 @@ class Config extends AbstractConfig implements ConfigInterface
 	 * @return void
      * Ne retourne aucune valeur
 	 */
-	public function set(string $key, mixed $value, ConfigEnum $index = ConfigEnum::Frontend): void
+	public function set(string $key, mixed $value, AreaConfigEnum $index = AreaConfigEnum::Frontend): void
 	{
         $this->vars[$index->value][$key] = $value;
 	}
@@ -111,7 +90,7 @@ class Config extends AbstractConfig implements ConfigInterface
      * @return bool
      * Retourne true en cas de succès, sinon false
      */
-    public function exists(string $key, ConfigEnum $index = ConfigEnum::Frontend): bool
+    public function exists(string $key, AreaConfigEnum $index = AreaConfigEnum::Frontend): bool
     {
         return array_key_exists($key, $this->vars[$index->value]);
     }
@@ -129,9 +108,9 @@ class Config extends AbstractConfig implements ConfigInterface
      * @throws BadConfigParamException
 	 * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
 	 */
-	public function get(string $key, ConfigEnum $index = ConfigEnum::Frontend): mixed
+	public function get(string $key, AreaConfigEnum $index = AreaConfigEnum::Frontend): mixed
 	{
-        if(!$this->exists($key, $index)) {
+        if(!$this->exists($key, $index->value)) {
             throw new BadConfigParamException("Paramètre de configuration inexistant. [$key]");
         }
 		

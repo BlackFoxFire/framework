@@ -16,25 +16,34 @@ use Blackfox\Exceptions\BadConfigOperationException;
 
 abstract class AbstractConfig extends ApplicationComponent implements \ArrayAccess
 {
-
     /**
      * Propriétés
      */
 
+    // Instance de cette classe
+    private static array $instance = [];
     // Nom du fichier de configuration json
     protected string $filename;
     // Tableau des paramètres de configuration de l'application
     protected array $vars = [];
 
     /**
-     * Constructeur
+     * Crée et/ou retourne l'instance d'une classe qui hérite de AbstractConfig
      * 
-     * @param Application $app
+     * @param Application $application
      * Instance de l'application
+     * @return AbstractConfig
+     * Retourne une instance qui hérite de AbstractConfig
      */
-    protected function __construct(Application $app)
+    public static function getInstance(Application $app): AbstractConfig
     {
-        parent::__construct($app);
+        $class = static::class;
+
+        if(!isset(self::$instance[$class])) {
+            self::$instance[$class] = new static($app);
+        }
+
+        return self::$instance[$class];
     }
 
     /**

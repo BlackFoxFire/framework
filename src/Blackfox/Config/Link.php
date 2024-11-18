@@ -10,38 +10,17 @@
 namespace Blackfox\Config;
 
 use Blackfox\Application;
-use Blackfox\Config\Interfaces\LinkInterface;
 use Blackfox\Exceptions\BadConfigParamException;
 
-class Link extends AbstractConfig implements LinkInterface
+class Link extends AbstractConfig
 {
-    // Instance de cette classe
-    private static ?self $instance = null;
-
-    /**
-     * Retourne l'instance de la classe Link
-     * 
-     * @param Application $application
-     * Instance de l'application
-     * @return self
-     * Retourne l'instance de cette classe
-     */
-    public static function getInstance(Application $application): self
-    {
-        if(is_null(self::$instance)) {
-            self::$instance = new self($application);
-        }
-
-        return self::$instance;
-    }
-
     /**
      * Constructeur
      * 
      * @param Application $application
      * Instance de l'application
      */
-    private function __construct(Application $application)
+    protected function __construct(Application $application)
     {
         parent::__construct($application);
 
