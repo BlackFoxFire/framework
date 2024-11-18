@@ -12,8 +12,9 @@ namespace Blackfox;
 use Blackfox\User\User;
 use Blackfox\Config\Link;
 use Blackfox\Config\Config;
-use Blackfox\Database\DBManager;
 use Blackfox\Exceptions\InvalidRouteException;
+use Blackfox\Factories\DBFactory;
+use Blackfox\Factories\Enums\DatabaseAPI;
 use Blackfox\Handlers\ErrorHandler;
 use Blackfox\Router\Router;
 
@@ -199,7 +200,9 @@ abstract class Application
 		$username = $this->config()['database']['username'];
 		$password = $this->config()['database']['password'];
 
-		$this->dbInstance = DBManager::get($api, $dbname, $username, $password);
+		if(!empty($dbname) || !empty($username)) {
+			$this->dbInstance = (new DBFactory())->createDBConnection(DatabaseAPI::from($api), $dbname, $username, $password);
+		}
 	}
 
 	/**

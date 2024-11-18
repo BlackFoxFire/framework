@@ -1,20 +1,22 @@
 <?php
 
 /**
- * DBManager.php
+ * DBFactory.php
  * @Auteur: Christophe Dufour
  * 
  * Retourne une instance de base de données en fonctions d'une api
  */
 
-namespace Blackfox\Database;
+namespace Blackfox\Factories;
 
-class DBManager
+use Blackfox\Factories\Enums\DatabaseAPI;
+
+class DBFactory
 {
     /**
      * Retourne l'instance de la base de données en fonction de l'api utilisée
      * 
-     * @param string $api
+     * @param DatabaseAPIEnum $api
      * L'api utilisé pour accéder à la base de données
      * @param string $dbname
 	 * Nom de la base de données
@@ -22,16 +24,12 @@ class DBManager
 	 * Nom d'utilisateur pour la connexion à la base de données
 	 * @param string $password
      * Mot de passe de l'utilisateur
-     * @return mixed
-     * Retourne une instance qui représente une connexion à la base de données ou null si une connexion est impossible
+     * @return \PDO
+     * Retourne une instance de PDO
      */
-    public static function get(string $api, string $dbname, string $username, string $password): mixed
+    public function createDBConnection(DatabaseAPI $api, string $dbname, string $username, string $password): \PDO
     {
-        if(empty($api)) {
-            return null;
-        }
-
-        $factoryName = "Blackfox\\Database\\" . $api . "Factory";
+        $factoryName = "Blackfox\\Database\\" . $api->value . "Factory";
         return $factoryName::getInstance($dbname, $username, $password);
     }
 
