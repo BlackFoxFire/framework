@@ -22,12 +22,12 @@ abstract class AbstractErrorHandler extends ApplicationComponent
     protected static array $instance = [];
 
     /**
-     * Initialise l'object et retourne l'instance de classe
+     * Crée et/ou retourne l'instance d'une classe qui hérite de AbstractErrorHandler
      * 
      * @param Application $app
      * Instance de l'application
      * @return AbstractErrorHandler
-     * Retourne une instance de AbstractErrorHandler
+     * Retourne une instance qui hérite de AbstractErrorHandler
      */
     public static function init(Application $app): AbstractErrorHandler
     {
