@@ -4,7 +4,7 @@
  * CreateInstance.php
  * @Auteur: Christophe Dufour
  * 
- * 
+ * Interface pour les classes de connexion à une base de données
  */
 
 namespace Blackfox\Database\Interfaces;
