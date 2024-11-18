@@ -9,8 +9,8 @@
 
 namespace Blackfox\Factories;
 
-use Blackfox\Application;
 use Blackfox\Exceptions\NoConnectionException;
+use Blackfox\Factories\Enums\DatabaseAPI;
 
 class Managers
 {
@@ -19,25 +19,21 @@ class Managers
 	 */
 	
 	// L'api utilisé pour accéder à la base de données
-	protected string $api;
+	protected DatabaseAPI $api;
 	// Le lien avec la base de données
 	protected mixed $dao;
-	// Namespace principale de l'application
-	protected string $appName;
 	// Tableau des modeles
 	protected array $managers = [];
 	
 	/**
 	 * Constructeur
 	 * 
-	 * @param Application $app
-	 * Instance de l'application
-	 * @param string $api
+	 * @param DatabaseAPI $api
 	 * L'api utilisé pour accéder à la base de données
 	 * @param mixed $dao
 	 * Le lien avec la base de données
 	 */
-	public function __construct(string $api, mixed $dao)
+	public function __construct(DatabaseAPI $api, mixed $dao)
 	{
 		$this->api = $api;
 		$this->dao = $dao;
@@ -70,7 +66,7 @@ class Managers
 		}
 		
 		if(!isset($this->managers[$model])) {
-			$manager = "Lib\Models\\" . $model . "Model" .  $this->api;
+			$manager = "Lib\Models\\" . $model . "Model" .  $this->api->value;
 			
 			$this->managers[$model] = new $manager($this->dao);
 		}

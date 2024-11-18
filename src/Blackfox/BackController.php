@@ -9,6 +9,7 @@
 
 namespace Blackfox;
 
+use Blackfox\Factories\Enums\DatabaseAPI;
 use Blackfox\Factories\Managers;
 use Blackfox\View\View;
 
@@ -77,7 +78,7 @@ abstract class BackController extends ApplicationComponent
 	 */
 	protected function setManager(): void
 	{
-		$api = $this->app->config()['database']['api'];
+		$api = DatabaseAPI::from($this->app->config()['database']['api']);
 		$this->managers = new Managers($api, $this->app->dbInstance());
 	}
 	
