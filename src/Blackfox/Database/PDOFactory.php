@@ -19,7 +19,7 @@ class PDOFactory implements CreateInstance
 	 */
 
 	// Une instance qui représente une connexion à la base de données
-	private static \PDO $instance;
+	private static ?\PDO $instance = null;
 
 	/**
 	 * Méthodes
