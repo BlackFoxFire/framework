@@ -75,4 +75,9 @@ class ErrorHandler extends AbstractErrorHandler
         $file->fwrite($string);
     }
 
+    /**
+     * INTERDIT l'appel à l'opérateur "clone" 
+     */
+    private function __clone():void {}
+    
 }

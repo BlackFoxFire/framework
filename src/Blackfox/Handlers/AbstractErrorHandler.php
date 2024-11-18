@@ -26,8 +26,8 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * 
      * @param Application $app
      * Instance de l'application
-     * @return self
-     * Retourne une instance de cette classe
+     * @return AbstractErrorHandler
+     * Retourne une instance de AbstractErrorHandler
      */
     public static function init(Application $app): AbstractErrorHandler
     {
@@ -39,14 +39,6 @@ abstract class AbstractErrorHandler extends ApplicationComponent
 
         return self::$instance[$class];
     }
-
-    /**
-     * Constructeur
-     * 
-     * @param Application $app
-     * Instance de l'application
-     */
-    abstract protected function __construct(Application $app);
 
     /**
      * Intercepte les exeptions lancées
