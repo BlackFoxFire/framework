@@ -12,7 +12,7 @@ namespace Blackfox\Handlers;
 use Blackfox\Application;
 
 class ErrorHandler extends AbstractErrorHandler
-{
+{   
     /**
 	 * Propriétes
 	 */
@@ -26,7 +26,7 @@ class ErrorHandler extends AbstractErrorHandler
      * @param Application $app
      * Instance de l'application
      */
-    private function __construct(Application $app)
+    protected function __construct(Application $app)
     {
         parent::__construct($app);
 
@@ -38,7 +38,7 @@ class ErrorHandler extends AbstractErrorHandler
      * Intercepte les exeptions lancées
      * 
      * @param \Throwable $exception
-     * Un execption implémentent l'interface Throwable
+     * Une execption qui implémentente l'interface Throwable
      * @return void
      * Ne retourne aucune valeur
      */

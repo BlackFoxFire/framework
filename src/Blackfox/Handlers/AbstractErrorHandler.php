@@ -2,25 +2,24 @@
 
 /**
  * AbstractErrorHandler.php
- * 
+ * @Auteur: Christophe Dufour
  * 
  */
 
 namespace Blackfox\Handlers;
 
-use Blackfox\View\View;
 use Blackfox\Application;
 use Blackfox\ApplicationComponent;
-use Blackfox\Handlers\Interfaces\ErrorHandler;
+use Blackfox\View\View;
 
-abstract class AbstractErrorHandler extends ApplicationComponent implements ErrorHandler
+abstract class AbstractErrorHandler extends ApplicationComponent
 {
     /**
-     * Propriétes
-     */
-
+	 * Propriétes
+	 */
+    
     // Instance de la classe
-    private static ?self $instance = null;
+    protected static array $instance = [];
 
     /**
      * Initialise l'object et retourne l'instance de classe
@@ -30,31 +29,34 @@ abstract class AbstractErrorHandler extends ApplicationComponent implements Erro
      * @return self
      * Retourne une instance de cette classe
      */
-    public static function init(Application $app): self
+    public static function init(Application $app): AbstractErrorHandler
     {
-        if(is_null(self::$instance)) {
-            self::$instance = new self($app);
+        $class = static::class;
+
+        if(!isset(self::$instance[$class])) {
+            self::$instance[$class] = new static($app);
         }
-        
-        return self::$instance;
+
+        return self::$instance[$class];
     }
 
     /**
-     * Retourne l'instance de cette classe
+     * Constructeur
      * 
-     * @return self
-     * Retourne une instance de cette classe
-     * @throws RuntimeException
-     * Lance une exception RuntimeException si $instance n'a pas été initialisé
+     * @param Application $app
+     * Instance de l'application
      */
-    public static function get(): self
-    {
-        if(is_null(self::$instance)) {
-            throw new \RuntimeException("Le gestionnaire doit être initialisé");
-        }
+    abstract protected function __construct(Application $app);
 
-        return self::$instance;
-    }
+    /**
+     * Intercepte les exeptions lancées
+     * 
+     * @param \Throwable $exception
+     * Une execption qui implémentente l'interface Throwable
+     * @return void
+     * Ne retourne aucune valeur
+     */
+    abstract public function errorHandler(\Throwable $exception): void;
 
     /**
      * Affiche une vue d'erreur
