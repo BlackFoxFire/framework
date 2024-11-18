@@ -10,7 +10,7 @@
 namespace Blackfox\Config;
 
 use Blackfox\Application;
-use Blackfox\Config\Enums\AreaConfigEnum;
+use Blackfox\Config\Enums\AreaConfig;
 use Blackfox\Exceptions\BadConfigParamException;
 
 class Config extends AbstractConfig
@@ -73,7 +73,7 @@ class Config extends AbstractConfig
 	 * @return void
      * Ne retourne aucune valeur
 	 */
-	public function set(string $key, mixed $value, AreaConfigEnum $index = AreaConfigEnum::Frontend): void
+	public function set(string $key, mixed $value, AreaConfig $index = AreaConfig::Frontend): void
 	{
         $this->vars[$index->value][$key] = $value;
 	}
@@ -90,7 +90,7 @@ class Config extends AbstractConfig
      * @return bool
      * Retourne true en cas de succès, sinon false
      */
-    public function exists(string $key, AreaConfigEnum $index = AreaConfigEnum::Frontend): bool
+    public function exists(string $key, AreaConfig $index = AreaConfig::Frontend): bool
     {
         return array_key_exists($key, $this->vars[$index->value]);
     }
@@ -108,7 +108,7 @@ class Config extends AbstractConfig
      * @throws BadConfigParamException
 	 * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
 	 */
-	public function get(string $key, AreaConfigEnum $index = AreaConfigEnum::Frontend): mixed
+	public function get(string $key, AreaConfig $index = AreaConfig::Frontend): mixed
 	{
         if(!$this->exists($key, $index->value)) {
             throw new BadConfigParamException("Paramètre de configuration inexistant. [$key]");
