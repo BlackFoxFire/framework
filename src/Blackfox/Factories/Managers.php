@@ -7,7 +7,7 @@
  * Crée le manageur demandé.
  */
 
-namespace Blackfox\Database;
+namespace Blackfox\Factories;
 
 use Blackfox\Application;
 use Blackfox\Exceptions\NoConnectionException;

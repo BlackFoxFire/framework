@@ -9,8 +9,7 @@
 
 namespace Blackfox;
 
-use Blackfox\Database\DBManager;
-use Blackfox\Database\Managers;
+use Blackfox\Factories\Managers;
 use Blackfox\View\View;
 
 abstract class BackController extends ApplicationComponent
