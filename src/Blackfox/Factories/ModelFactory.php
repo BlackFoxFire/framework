@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Managers.php
+ * ModelFactory.php
  * @Auteur: Christophe Dufour
  * 
  * Crée le manageur demandé.
@@ -69,7 +69,7 @@ class ModelFactory
 			$factory = "Lib\Models\\" . $model . "Model" .  $this->api->value;
 		
 			if(!class_exists($factory)) {
-				throw new \Exception("La classe $factory n'a pas peu être trouvée");
+				throw new \Exception("La classe usine $factory n'a pas peu être trouvée.");
 			}
 			
 			$this->factories[$model] = new $factory($this->dao);
