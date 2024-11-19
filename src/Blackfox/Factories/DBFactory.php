@@ -65,13 +65,13 @@ class DBFactory
                 return null;
             }
             
-            $factoryName = "Blackfox\\Database\\" . $this->api->value . "Factory";
+            $factory = "Blackfox\\Database\\" . $this->api->value . "Factory";
 
-            if(!class_exists($factoryName)) {
-                throw new \Exception();
+            if(!class_exists($factory)) {
+                throw new \Exception("La classe usine $factory n'a pas peu être trouvée.");
             }
             
-            $this->dbInstance = $factoryName::getInstance($this->dbname, $this->username, $this->password);
+            $this->dbInstance = $factory::getInstance($this->dbname, $this->username, $this->password);
         }
         
         return $this->dbInstance;
