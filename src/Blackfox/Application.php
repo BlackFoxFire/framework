@@ -42,8 +42,8 @@ abstract class Application
 	protected Config $config;
 	// Object contenant les liens de l'application
 	protected Link $link;
-	// Instance de la base de données
-	protected mixed $dbInstance = null;
+	// Factory de la base de données
+	protected mixed $dbFactory;
 	
 	/**
 	 * Constructeur
@@ -65,7 +65,8 @@ abstract class Application
 		$this->user = new User($this);
 		$this->config = Config::getInstance($this);
 		$this->link = Link::getInstance($this);
-		$this->setDbInstance();
+		$this->dbFactory = new DBFactory(DatabaseAPI::from($this->config['database']['api']), $this->config['database']['dbname'], 
+															$this->config['database']['username'], $this->config['database']['password']);
 		ErrorHandler::init($this);
 	}
 	
@@ -173,36 +174,14 @@ abstract class Application
 	}
 
 	/**
-	 * Retourne la valeur de $dbInstance
+	 * Retourne la valeur de $dbFactory
 	 * 
 	 * @return mixed
-	 * Retourne une instance de base de données ou null si aucune connexion
+	 * Peut retourner plusieurs types de données
 	 */
-	public function dbInstance(): mixed
+	public function dbFactory(): mixed
 	{
-		return $this->dbInstance;
-	}
-	
-	/**
-	 * Setters
-	 */
-
-	/**
-	 * Modifie la valeur de $dbInstance
-	 * 
-	 * @return void
-	 * Ne retourne aucune valeur
-	 */
-	protected function setDbInstance(): void
-	{
-		$api = DatabaseAPI::from($this->config()['database']['api']);
-		$dbname = $this->config()['database']['dbname'];
-		$username = $this->config()['database']['username'];
-		$password = $this->config()['database']['password'];
-
-		if(!empty($dbname) || !empty($username)) {
-			$this->dbInstance = (new DBFactory())->createDBConnection($api, $dbname, $username, $password);
-		}
+		return $this->dbFactory;
 	}
 
 	/**
