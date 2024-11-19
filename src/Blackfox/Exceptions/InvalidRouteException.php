@@ -9,7 +9,7 @@
 
 namespace Blackfox\Exceptions;
 
-class InvalidRouteException extends MambaException
+class InvalidRouteException extends BlackfoxException
 {
 
 }

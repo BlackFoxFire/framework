@@ -9,7 +9,7 @@
 
 namespace Blackfox\Exceptions;
 
-class NoConnectionException extends MambaException
+class NoConnectionException extends BlackfoxException
 {
 
 }

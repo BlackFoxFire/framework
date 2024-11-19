@@ -9,7 +9,7 @@
 
 namespace Blackfox\Exceptions;
 
-class BadConfigOperationException extends MambaException
+class BadConfigOperationException extends BlackfoxException
 {
 
 }

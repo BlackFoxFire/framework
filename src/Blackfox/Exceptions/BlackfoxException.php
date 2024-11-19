@@ -9,7 +9,7 @@
 
 namespace Blackfox\Exceptions;
 
-class MambaException extends \Exception
+class BlackfoxException extends \Exception
 {
 
 }
