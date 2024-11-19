@@ -10,6 +10,7 @@
 namespace Blackfox\Factories;
 
 use Blackfox\Entities\Entity;
+use Blackfox\Exceptions\EntityErrorException;
 
 class EntityFactory
 {
@@ -28,13 +29,13 @@ class EntityFactory
 			throw new \ValueError('L\'entité ne peut pas être une chaine de caractère vide.');
 		}
 
-        $className = "Lib\Entities\\" . $entity;
+        $entity = "Lib\Entities\\" . $entity;
 
-        if(!class_exists($className)) {
-            throw new \Exception("L'entité $className n'a pas peu être trouvée.");
+        if(!class_exists($entity)) {
+            throw new EntityErrorException("L'entité $entity n'a pas peu être trouvée.");
         }
         
-        return new $className($datas);
+        return new $entity($datas);
     }
 
 }

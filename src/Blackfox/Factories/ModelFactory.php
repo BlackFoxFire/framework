@@ -9,6 +9,7 @@
 
 namespace Blackfox\Factories;
 
+use Blackfox\Exceptions\FactoryErrorException;
 use Blackfox\Exceptions\NoConnectionException;
 use Blackfox\Factories\Enums\DatabaseAPI;
 
@@ -69,7 +70,7 @@ class ModelFactory
 			$factory = "Lib\Models\\" . $model . "Model" .  $this->api->value;
 		
 			if(!class_exists($factory)) {
-				throw new \Exception("La classe usine $factory n'a pas peu être trouvée.");
+				throw new FactoryErrorException("La classe usine $factory n'a pas peu être trouvée.");
 			}
 			
 			$this->factories[$model] = new $factory($this->dao);

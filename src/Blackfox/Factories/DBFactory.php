@@ -9,6 +9,7 @@
 
 namespace Blackfox\Factories;
 
+use Blackfox\Exceptions\FactoryErrorException;
 use Blackfox\Factories\Enums\DatabaseAPI;
 
 class DBFactory
@@ -68,7 +69,7 @@ class DBFactory
             $factory = "Blackfox\\Database\\" . $this->api->value . "Factory";
 
             if(!class_exists($factory)) {
-                throw new \Exception("La classe usine $factory n'a pas peu être trouvée.");
+                throw new FactoryErrorException("La classe usine $factory n'a pas peu être trouvée.");
             }
             
             $this->dbInstance = $factory::getInstance($this->dbname, $this->username, $this->password);
