@@ -4,6 +4,7 @@
  * AbstractErrorHandler.php
  * @Auteur: Christophe Dufour
  * 
+ * Classe de base pour les gestionnaires d'erreurs
  */
 
 namespace Blackfox\Handlers;
