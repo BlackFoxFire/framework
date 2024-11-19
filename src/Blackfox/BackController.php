@@ -9,7 +9,7 @@
 
 namespace Blackfox;
 
-use Blackfox\Factories\Managers;
+use Blackfox\Factories\EntityFactory;
 use Blackfox\Factories\ModelFactory;
 use Blackfox\Factories\Enums\DatabaseAPI;
 use Blackfox\View\View;
@@ -20,10 +20,10 @@ abstract class BackController extends ApplicationComponent
 	 * Propriétes
 	 */
 	
-	// Objet des managers
-	protected Managers $managers;
 	// Créateur pour les modèles
 	protected ModelFactory $modelFactory;
+	// Créateur pour les entités
+	protected EntityFactory $entityFactory;
 	// Le nom du contrôleur actuel
 	protected string $controller = "";
 	// La méthode à éxécuter
@@ -47,7 +47,6 @@ abstract class BackController extends ApplicationComponent
 	{
 		parent::__construct($app);
 
-		$this->managers = new Managers(DatabaseAPI::from($this->app->config()['database']['api']), $this->app->dbFactory()->get());
 		$this->modelFactory = new ModelFactory(DatabaseAPI::from($this->app->config()['database']['api']), $this->app->dbFactory()->get());
 		$this->view = new View($app, $controller);
 		$this->setController($controller);
