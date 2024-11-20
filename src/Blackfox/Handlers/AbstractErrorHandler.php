@@ -125,4 +125,17 @@ abstract class AbstractErrorHandler extends ApplicationComponent
 		}
 	}
 
+    /**
+     * Interdit l'utilisation de unserialize
+     * 
+     * @return void
+     * Ne retourne aucune valeur
+     * @throws \Exception
+     * Lance une exception Exception si cette méthode est appelée
+     */
+    final public function __wakeup(): void
+    {
+        throw new \Exception("Impossible de désérialiser un singleton");
+    }
+
 }
