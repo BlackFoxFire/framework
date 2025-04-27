@@ -50,10 +50,10 @@ class HTTPRequest extends ApplicationComponent
 	 * 
 	 * @param string $key
 	 * L'élément du tableau dont la valeur est à retourner
-	 * @return string
+	 * @return string|null
 	 * Retourne une chaine de caractère ou null si l'élément n'existe pas
 	 */
-	public function getFromGet(string $key): string
+	public function getFromGet(string $key): string|null
 	{
 		if(isset($_GET[$key])) {
 			return $_GET[$key];
@@ -97,10 +97,10 @@ class HTTPRequest extends ApplicationComponent
 	 * 
 	 * @param string $key
 	 * L'élément du tableau dont la valeur est à retourner
-	 * @return string
+	 * @return string|null
 	 * Retourne une chaine de caractère ou null si l'élément n'existe pas
 	 */
-	public function getFromPost(string $key): string
+	public function getFromPost(string $key): string|null
 	{
 		if(isset($_POST[$key])) {
 			return $_POST[$key];
@@ -146,10 +146,10 @@ class HTTPRequest extends ApplicationComponent
 	 * 
 	 * @param string $key
 	 * L'élément du tableau dont la valeur est à retourner
-	 * @return string
+	 * @return string|null
 	 * Retourne une chaine de caractère ou null si l'élément n'existe pas
 	 */
-	public function getCookie(string $key): string
+	public function getCookie(string $key): string|null
 	{
 		if(isset($_COOKIE[$key])) {
 			return $_COOKIE[$key];
