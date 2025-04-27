@@ -157,7 +157,7 @@ class Route
 	/**
 	 * Modifie la valeur de $varsNames
 	 * 
-	 * @param string $varsNames
+	 * @param array $varsNames
 	 * Variable à initialiser à partir de l'url
 	 * @return void
 	 * Ne retourne aucune valeur
