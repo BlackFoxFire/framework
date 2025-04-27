@@ -162,7 +162,7 @@ class User extends ApplicationComponent
 	 * @return string
 	 * Le message à l'attention de l'utilisateur
 	 */
-	public function getMessage(): string
+	public function getMessage(): string|null
 	{
 		if(isset($_SESSION['hasMessage'])) {
 			$message = $_SESSION['hasMessage'];
@@ -171,6 +171,8 @@ class User extends ApplicationComponent
 				
 			return $message;
 		}
+
+		return null;
 	}
 	
 	/**
