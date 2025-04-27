@@ -115,14 +115,12 @@ abstract class AbstractErrorHandler extends ApplicationComponent
 	 */
 	public function displayErrors(?int $value = null): int|false
 	{
-        if(is_null($value)) {
-            return ini_get("display_errors");
-        }
-
 		if(in_array($value, [0, 1])) {
 			ini_set("display_errors", $value);
             return $value;
 		}
+
+        return ini_get("display_errors");
 	}
 
     /**
