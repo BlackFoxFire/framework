@@ -48,6 +48,7 @@ abstract class BackController extends ApplicationComponent
 		parent::__construct($app);
 
 		$this->modelFactory = new ModelFactory(DatabaseAPI::from($this->app->config()['database']['api']), $this->app->dbFactory()->get());
+		$this->entityFactory = new EntityFactory;
 		$this->view = new View($app, $controller);
 		$this->setController($controller);
 		$this->setMethod($method);
