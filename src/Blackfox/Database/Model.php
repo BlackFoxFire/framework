@@ -80,18 +80,21 @@ abstract class Model
 	 * 
 	 * @param string $table
 	 * Le nom de la table
-	 * @param sbool $fetchClass
+	 * @param bool $fetchClass
 	 * [Optionnel]
 	 * Si true on retourne un tableau d'objet. Sinon c'est un tableau associatif
+	 * @param string $class
+	 * [Optionnel]
+	 * Si le paramètre $fetchClass est égal à true, $class doit contenir le nom de la classe utiliser
 	 * @return array
 	 * Retourne un tableau associatif ou un tableu d'objet
 	 */
-	public function getAll(string $table, bool $fetchClass = false): array
+	public function getAll(string $table, bool $fetchClass = false, string $class = ""): array
 	{
 		$sql = "SELECT * FROM $table";
 		
 		$request = $this->execute($sql);
-		$fetchClass ? $request->setFetchMode(\PDO::FETCH_ASSOC) : $request->setFetchMode(\PDO::FETCH_CLASS);
+		$fetchClass ? $request->setFetchMode(\PDO::FETCH_ASSOC) : $request->setFetchMode(\PDO::FETCH_CLASS, $class);
 		$datas = $request->fetchAll();
 		$request->closeCursor();
 		
