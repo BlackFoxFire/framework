@@ -11,6 +11,7 @@ namespace Blackfox;
 
 use Blackfox\Config\Link;
 use Blackfox\Config\Config;
+use Blackfox\Config\Enums\AreaConfig;
 use Blackfox\Exceptions\InvalidRouteException;
 use Blackfox\Factories\DBFactory;
 use Blackfox\Factories\Enums\DatabaseAPI;
@@ -65,8 +66,10 @@ abstract class Application
 		$this->user = new User($this);
 		$this->config = Config::getInstance($this);
 		$this->link = Link::getInstance($this);
-		$this->dbFactory = new DBFactory(DatabaseAPI::from($this->config['database']['api']), $this->config['database']['dbname'], 
-															$this->config['database']['username'], $this->config['database']['password']);
+		$this->dbFactory = new DBFactory(DatabaseAPI::from($this->config->get('api', AreaConfig::Database)),
+															$this->config->get('dbname', AreaConfig::Database), 
+															$this->config->get('username', AreaConfig::Database),
+															$this->config->get('password', AreaConfig::Database));
 		ErrorHandler::init($this);
 	}
 	

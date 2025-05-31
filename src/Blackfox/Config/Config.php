@@ -19,7 +19,6 @@ class Config extends AbstractConfig
      * Constructeur
      * 
      * @param Application $application
-     * Instance de l'application
      */
     protected function __construct(Application $application)
     {
@@ -37,9 +36,8 @@ class Config extends AbstractConfig
      * Crée la structure du tableau des paramètres
      * 
      * @param array $vars
-     * Tableau contenant les paramètres de configuration
+     * 
      * @return void
-     * Ne retourne aucune valeur
      */
     public function create(array $vars = []): void
     {
@@ -64,14 +62,12 @@ class Config extends AbstractConfig
 	 * Modifie la valeur d'une variable dans le tableau des configurations si celle-ci existe.
 	 * 
 	 * @param string $key
-     * La vlé du tableau à modifier
+     * 
      * @param mixed $value
-     * La valeur à assigner
+     * 
      * @param AreaConfig
-     * [Optionnel]
-     * Sous tableau où l'analyse doit se faire
+     * 
 	 * @return void
-     * Ne retourne aucune valeur
 	 */
 	public function set(string $key, mixed $value, AreaConfig $index): void
 	{
@@ -82,10 +78,9 @@ class Config extends AbstractConfig
      * Vérifie l'existence d'une variable dans le tableau des paramètres
      * 
      * @param string $key
-     * La clé à analyser
+     * 
      * @param AreaConfig $index
-     * [Optionnel]
-     * Sous tableau où l'analyse doit se faire
+     * 
      * @return bool
      * Retourne true en cas de succès, sinon false
      */
@@ -95,17 +90,15 @@ class Config extends AbstractConfig
     }
 
     /**
-	 * Retourne le tableau des paramètres ou une valeur du tableau des paramètres
+	 * Retourne la valeur d'un paramètres
 	 * 
 	 * @param string $key
-     * La clé du tableau dont la valeur est à retourner
+     * 
      * @param AreaConfig $index
-     * [Optionnel]
-     * Sous tableau où l'analyse doit se faire
+     * 
 	 * @return mixed
-     * Retourne un tableau ou une valeur en cas de succès
+     * 
      * @throws BadConfigParamException
-	 * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
 	 */
 	public function get(string $key, AreaConfig $index): mixed
 	{
@@ -115,5 +108,33 @@ class Config extends AbstractConfig
 		
 		return $this->vars[$index->value][$key];
 	}
+
+    /**
+     * Retourne la valeur d'un paramètres
+     * 
+     * @param string $name
+     * 
+     * @param array $arguments
+     * 
+     * @return mixed
+     * 
+     * @throws BadConfigParamException
+     */
+    public function __call(string $name, array $arguments): mixed
+    {
+        if(!AreaConfig::tryFrom($name)) {
+            throw new BadConfigParamException("Paramètre de configuration inexistant. [$name]");
+        }
+
+        if(empty($arguments)) {
+            throw new BadConfigParamException("Vous devez spécifier un argument pour la méthode [$name].");
+        }
+
+        if(!array_key_exists($arguments[0], $this->vars[$name])) {
+            throw new BadConfigParamException("Paramètre de configuration inexistant. [$name][$arguments[0]]");
+        }
+
+        return $this->vars[$name][$arguments[0]];
+    }
 
 }

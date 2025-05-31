@@ -11,15 +11,9 @@ namespace Blackfox\Config;
 
 use Blackfox\Application;
 use Blackfox\ApplicationComponent;
-use Blackfox\Exceptions\BadConfigParamException;
-use Blackfox\Exceptions\BadConfigOperationException;
 
-abstract class AbstractConfig extends ApplicationComponent implements \ArrayAccess
+abstract class AbstractConfig extends ApplicationComponent
 {
-    /**
-     * Propriétés
-     */
-
     // Instance de cette classe
     private static array $instance = [];
     // Nom du fichier de configuration json
@@ -31,9 +25,8 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
      * Crée et/ou retourne l'instance d'une classe qui hérite de AbstractConfig
      * 
      * @param Application $application
-     * Instance de l'application
+     * 
      * @return AbstractConfig
-     * Retourne une instance qui hérite de AbstractConfig
      */
     public static function getInstance(Application $app): AbstractConfig
     {
@@ -47,14 +40,9 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
     }
 
     /**
-     * Getters et Setters
-     */
-
-    /**
-     * Retourne la valeur de $filename
+     * Retourne la valeur de filename
      * 
      * @return string
-     * Le nom du fichier de configuration
      */
     public function filename(): string
     {
@@ -62,19 +50,14 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
     }
 
     /**
-     * Retourne la valeur de $vars
+     * Retourne la valeur de vars
      * 
      * @return array|null
-     * Retourne un tableau ou null si le tableau est vide
      */
     public function vars(): array|null
     {
         return !empty($this->vars) ? $this->vars : null;
     }
-
-    /**
-     * Méthodes
-     */
 
     /**
      * Lit un fichier de configuration au format json
@@ -105,7 +88,6 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
      * [Optionnel]
      * Tableau contenant les paramètres de configuration
 	 * @return void
-     * Ne retourne aucune valeur
 	 */
 	abstract public function create(array $vars = []): void;
 
@@ -120,67 +102,5 @@ abstract class AbstractConfig extends ApplicationComponent implements \ArrayAcce
 		$file = new \SplFileObject($this->filename, "w");
 		return $file->fwrite(json_encode($this->vars, JSON_PRETTY_PRINT));
 	}
-
-    /**
-     * Vérifie l'existence d'une variable dans le tableau des paramètres
-     * 
-     * @param mixed $offset
-     * La clé à analyser
-     * @return bool
-     * Retourne true si la variable existe, sinon false
-     */
-    public function offsetExists(mixed $offset): bool
-    {
-        return isset($this->vars[$offset]);
-    }
-
-    /**
-     * Retourne la valeur d'une variable du tableau des paramètres
-     * 
-     * @param mixed $offset
-     * La clé du tableau dont la valeur est à retourner
-     * @return mixed
-     * Retourne une valeur ou null si l'index du tableau n'existe pas
-     * @throws BadConfigParamExecption
-     * Lance une exception BadConfigParamExecption si une variable du tableau des paramètres n'existe pas
-     */
-    public function offsetGet(mixed $offset): mixed
-    {
-        if(!$this->offsetExists($offset)) {
-            throw new BadConfigParamException("Paramètre de configuration inexistant.");
-        }
-
-        return $this->vars[$offset];
-    }
-
-    /**
-     * Ajoute ou modifie une variable du tableau des paramètres
-     * 
-     * @param string $offset
-     * La clé du tableau à modifier
-     * @param mixed $value
-     * La valeur à assigner
-     * @return void
-     * Ne retourne aucune valeur
-     */
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        $this->vars[$offset] = $value;
-    }
-
-    /**
-     * Supprime une variable du tableau des paramètres
-     * 
-     * @param mixed $offset
-     * La clé du tableau à supprimer
-     * @return void
-     * Ne retourne pas de valeur
-     * @throws BadConfigOperationException
-     * Lance une exception BadConfigOperationException si on tente d'effacer un paramètre de configuration
-     */
-    public function offsetUnset(mixed $offset): void
-    {
-        throw new BadConfigOperationException("Opération interdite! Vous ne pouvez pas effacer un paramètre de configuration.");
-    }
     
 }

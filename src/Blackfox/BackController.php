@@ -9,6 +9,7 @@
 
 namespace Blackfox;
 
+use Blackfox\Config\Enums\AreaConfig;
 use Blackfox\Factories\EntityFactory;
 use Blackfox\Factories\ModelFactory;
 use Blackfox\Factories\Enums\DatabaseAPI;
@@ -46,8 +47,7 @@ abstract class BackController extends ApplicationComponent
 	public function __construct(Application $app, string $controller, string $method)
 	{
 		parent::__construct($app);
-
-		$this->modelFactory = new ModelFactory(DatabaseAPI::from($this->app->config()['database']['api']), $this->app->dbFactory()->get());
+		$this->modelFactory = new ModelFactory(DatabaseAPI::from($this->app->config()->get('api', AreaConfig::Database)), $this->app->dbFactory()->get());
 		$this->entityFactory = new EntityFactory;
 		$this->view = new View($app, $controller);
 		$this->setController($controller);
