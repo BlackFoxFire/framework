@@ -11,14 +11,9 @@ namespace Blackfox\View;
 
 use Blackfox\Application;
 use Blackfox\ApplicationComponent;
-use Blackfox\Config\Link;
 
 class View extends ApplicationComponent
 {
-	/**
-	 * Propriétes
-	 */
-	
 	// Tableau des chemins ou sont stoqués les templates
 	protected array $path = [];
 	// Le nom du fichier vue
@@ -32,12 +27,12 @@ class View extends ApplicationComponent
 	 * Constructeur
 	 * 
 	 * @param Application $application
-	 * Instance de l'application
+	 * 
 	 * @param string $controller
 	 * [Optionnel]
 	 * Controlleur où le traitement a eu lieu
 	 */
-	public function __construct(Application $application, string $controller = null)
+	public function __construct(Application $application, string $controller = "")
 	{
 		parent::__construct($application);
 		
@@ -50,20 +45,15 @@ class View extends ApplicationComponent
 		
 		$this->path = $data;
 	}
-
-	/**
-	 * Setters
-	 */
 	
 	/**
 	 * Modifie la valeur $viewFile
 	 * 
 	 * @param string $viewFile
-	 * La vue qu'il faudra afficher
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws ValueError
-	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setViewFile(string $viewFile): void
 	{
@@ -78,16 +68,15 @@ class View extends ApplicationComponent
 	 * Ajoute une variable de template
 	 * 
 	 * @param mixed $data
-	 * La variable ou un tableeau de pair variable - valeur à ajouter au template
+	 * 
 	 * @param mixed $value
 	 * [Optionnel]
 	 * La valeur de la variable à ajouter
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws ValueError
-	 * Lance une exception ValueError si une des paramètre passé est vide
+	 * 
 	 * @throws InvalidArgumentException
-	 * Lance une exception InvalidArgumentException si le paramètre $data n'est pas un tableau ou une chaine de caractère
 	 */
 	public function setData(mixed $data, mixed $value = null): void
 	{
@@ -109,18 +98,13 @@ class View extends ApplicationComponent
 			throw new \InvalidArgumentException('Le nom de la variable doit être une chaine de caractères valide');
 		}
 	}
-	
-	/**
-	 * Méthodes
-	 */
 
 	/**
 	 * Retourne la vue à afficher
 	 * 
 	 * @return mixed
-	 * Retourne divers types de valeur
+	 * 
 	 * @throws RuntimeException
-	 * Lance une exception RuntimeException si le fichier de vue n'existe pas
 	 */
 	public function render(): mixed
 	{
@@ -139,7 +123,7 @@ class View extends ApplicationComponent
 		
 		$this->data['user'] = $this->app->user();
 
-		if($links = Link::getInstance($this->app())->vars()) {
+		if($links = $this->app()->link()->vars()) {
 			$this->setData($links);
 		}
 		
