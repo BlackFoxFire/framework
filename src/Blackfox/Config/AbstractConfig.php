@@ -14,49 +14,36 @@ use Blackfox\ApplicationComponent;
 
 abstract class AbstractConfig extends ApplicationComponent
 {
-    // Instance de cette classe
-    private static array $instance = [];
-    // Nom du fichier de configuration json
-    protected string $filename;
-    // Tableau des paramètres de configuration de l'application
-    protected array $vars = [];
+    // Tableau des fichiers de configuration
+    protected static array $file = [];
+    // Tableau des paramètres de configuration
+    protected static array $vars = [];
 
     /**
-     * Crée et/ou retourne l'instance d'une classe qui hérite de AbstractConfig
+     * Initialisation
      * 
-     * @param Application $application
-     * 
-     * @return AbstractConfig
+     * @return void
      */
-    public static function getInstance(Application $app): AbstractConfig
-    {
-        $class = static::class;
-
-        if(!isset(self::$instance[$class])) {
-            self::$instance[$class] = new static($app);
-        }
-
-        return self::$instance[$class];
-    }
-
-    /**
-     * Retourne la valeur de filename
-     * 
-     * @return string
-     */
-    public function filename(): string
-    {
-        return $this->filename;
-    }
+    abstract static function init(Application $app): void;
 
     /**
      * Retourne la valeur de vars
      * 
      * @return array|null
      */
-    public function vars(): array|null
+    public static function vars(): array|null
     {
-        return !empty($this->vars) ? $this->vars : null;
+        return !empty(self::$vars[static::class]) ? self::$vars[static::class] : null;
+    }
+
+    /**
+     * Modifie la valeur de vars
+     * 
+     * @return void
+     */
+    public function setVars(array $vars): void
+    {
+        self::$vars[static::class] = $vars;
     }
 
     /**
@@ -65,42 +52,34 @@ abstract class AbstractConfig extends ApplicationComponent
 	 * @return bool
      * Retourne true en cas de succès, sinon false
      */
-	protected function load(): bool
+	protected static function load(): bool
 	{
-		if(empty($this->vars)) {
-			if(is_file($this->filename)) {
-            	$file = new \SplFileObject($this->filename);
-            	$content = $file->fread($file->getSize());
-            	$this->vars = json_decode($content, true);
-				return true;
-			}
+        if(!is_file(self::$file[static::class])) {
+            return false;
+        }
 
-			return false;
-		}
-
-		return true;
+        $file = new \SplFileObject(self::$file[static::class]);
+        $content = $file->fread($file->getSize());
+        self::$vars[static::class] = json_decode($content, true);
+        
+        return true;
 	}
-
-	/**
-	 * Crée la structure du tableau des paramètres
-	 * 
-     * @param array $vars
-     * [Optionnel]
-     * Tableau contenant les paramètres de configuration
-	 * @return void
-	 */
-	abstract public function create(array $vars = []): void;
 
     /**
 	 * Ecrit un fichier de paramètres au format json
 	 * 
 	 * @return int|false
      * Retourne le nombre d'octets écrits, ou false si une erreur survient.
+     * @throws RuntimeException
 	 */
-	public function write(): int|false
+	public static function write(): int|false
 	{
-		$file = new \SplFileObject($this->filename, "w");
-		return $file->fwrite(json_encode($this->vars, JSON_PRETTY_PRINT));
+        if(empty(self::$vars[static::class])) {
+            throw new \RuntimeException("Impossible d'écrire un tableau de paramètres vide!");
+        }
+
+		$file = new \SplFileObject(self::$file[static::class], "w");
+		return $file->fwrite(json_encode(self::$vars[static::class], JSON_PRETTY_PRINT));
 	}
     
 }

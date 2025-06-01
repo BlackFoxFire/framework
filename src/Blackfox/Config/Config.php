@@ -15,47 +15,17 @@ use Blackfox\Exceptions\BadConfigParamException;
 
 class Config extends AbstractConfig
 {
+    const FILENAME = "/config/conf.json";
+    
     /**
-     * Constructeur
-     * 
-     * @param Application $application
-     */
-    protected function __construct(Application $application)
-    {
-        parent::__construct($application);
-
-        $this->filename = $this->app->rootDir() . str_replace('/', DIRECTORY_SEPARATOR, "/config/conf.json");
-
-        if(!$this->load()) {
-			$this->create();
-            $this->write();
-		}
-    }
-
-    /**
-     * Crée la structure du tableau des paramètres
-     * 
-     * @param array $vars
+     * Initialisation
      * 
      * @return void
      */
-    public function create(array $vars = []): void
+    public static function init(Application $app): void
     {
-        if(!empty($vars)) {
-            $this->vars = $vars;
-        }
-        else {
-            $this->vars = array(
-                'database' => array(
-                    'dbname' => "",
-                    'username' => "",
-                    'password' => ""
-                ),
-                'global' => array(),
-                'backend' => array(),
-                'frontend' => array()
-            );
-        }
+        self::$file[static::class] = $app->rootDir() . str_replace('/', DIRECTORY_SEPARATOR, self::FILENAME);
+        self::load();
     }
 
     /**
@@ -69,9 +39,9 @@ class Config extends AbstractConfig
      * 
 	 * @return void
 	 */
-	public function set(string $key, mixed $value, AreaConfig $index): void
+	public static function set(string $key, mixed $value, AreaConfig $index): void
 	{
-        $this->vars[$index->value][$key] = $value;
+        self::$vars[static::class][$index->value][$key] = $value;
 	}
 
     /**
@@ -84,33 +54,39 @@ class Config extends AbstractConfig
      * @return bool
      * Retourne true en cas de succès, sinon false
      */
-    public function exists(string $key, AreaConfig $index): bool
+    public static function exists(string $key, AreaConfig $index): bool
     {
-        return array_key_exists($key, $this->vars[$index->value]);
+        return array_key_exists($key, self::$vars[static::class][$index->value]);
     }
 
     /**
-	 * Retourne la valeur d'un paramètres
-	 * 
-	 * @param string $key
+	 * Retourne la valeur d'un paramètre
      * 
      * @param AreaConfig $index
      * 
+     * @param string $key
+     * [Optionnel]
+     * Si key est vide, le retour sera une section du tableau de configuration, 
+     * sinon c'est la valeur de key qui est retournée
 	 * @return mixed
      * 
      * @throws BadConfigParamException
 	 */
-	public function get(string $key, AreaConfig $index): mixed
+	public static function get(AreaConfig $index, string $key = ""): mixed
 	{
-        if(!$this->exists($key, $index)) {
+        if(empty($key)) {
+            return self::$vars[static::class][$index->value];
+        }
+
+        if(!array_key_exists($key, self::$vars[static::class][$index->value])) {
             throw new BadConfigParamException("Paramètre de configuration inexistant. [$key]");
         }
 		
-		return $this->vars[$index->value][$key];
+		return self::$vars[static::class][$index->value][$key];
 	}
 
     /**
-     * Retourne la valeur d'un paramètres
+     * Retourne la valeur d'un paramètre
      * 
      * @param string $name
      * 
@@ -120,7 +96,7 @@ class Config extends AbstractConfig
      * 
      * @throws BadConfigParamException
      */
-    public function __call(string $name, array $arguments): mixed
+    public static function __callStatic(string $name, array $arguments): mixed
     {
         if(!AreaConfig::tryFrom($name)) {
             throw new BadConfigParamException("Paramètre de configuration inexistant. [$name]");
@@ -130,11 +106,32 @@ class Config extends AbstractConfig
             throw new BadConfigParamException("Vous devez spécifier un argument pour la méthode [$name].");
         }
 
-        if(!array_key_exists($arguments[0], $this->vars[$name])) {
+        if(!array_key_exists($arguments[0], self::$vars[static::class][$name])) {
             throw new BadConfigParamException("Paramètre de configuration inexistant. [$name][$arguments[0]]");
         }
 
-        return $this->vars[$name][$arguments[0]];
+        return self::$vars[static::class][$name][$arguments[0]];
+    }
+
+    /**
+     * Crée la structure du tableau des paramètres
+     * 
+     * @param array $vars
+     * 
+     * @return void
+     */
+    public static function create(): void
+    {
+        self::$vars = array(
+            'database' => array(
+                'dbname' => "",
+                'username' => "",
+                'password' => ""
+            ),
+            'global' => array(),
+            'backend' => array(),
+            'frontend' => array()
+        );
     }
 
 }

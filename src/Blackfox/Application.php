@@ -39,10 +39,6 @@ abstract class Application
 	protected string $name;
 	// Objet représentant l'utilisateur
 	protected User $user;
-	// Object contenant les paramètres de configuration de l'application
-	protected Config $config;
-	// Object contenant les liens de l'application
-	protected Link $link;
 	// Factory de la base de données
 	protected mixed $dbFactory;
 	
@@ -64,12 +60,12 @@ abstract class Application
 		$this->httpRequest = new HTTPRequest($this);
 		$this->httpResponse = new HTTPResponse($this);
 		$this->user = new User($this);
-		$this->config = Config::getInstance($this);
-		$this->link = Link::getInstance($this);
-		$this->dbFactory = new DBFactory(DatabaseAPI::from($this->config->get('api', AreaConfig::Database)),
-															$this->config->get('dbname', AreaConfig::Database), 
-															$this->config->get('username', AreaConfig::Database),
-															$this->config->get('password', AreaConfig::Database));
+		Config::init($this);
+		Link::init($this);
+		$this->dbFactory = new DBFactory(DatabaseAPI::from(Config::get(AreaConfig::Database, 'api')),
+															Config::get(AreaConfig::Database, 'dbname'), 
+															Config::get(AreaConfig::Database, 'username'),
+															Config::get(AreaConfig::Database, 'password'));
 		ErrorHandler::init($this);
 	}
 	
@@ -152,28 +148,6 @@ abstract class Application
 	public function user(): User
 	{
 		return $this->user;
-	}
-
-	/**
-	 * Retourne la valeur de $config
-	 * 
-	 * @return Config
-	 * Retourne un objet Blackfox\Config
-	 */
-	public function config(): Config
-	{
-		return $this->config;
-	}
-
-	/**
-	 * Retourne la valeur de $link
-	 * 
-	 * @return Link
-	 * Retourne un objet Blackfox\Link
-	 */
-	public function link(): Link
-	{
-		return $this->link;
 	}
 
 	/**

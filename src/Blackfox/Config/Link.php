@@ -14,40 +14,17 @@ use Blackfox\Exceptions\BadConfigParamException;
 
 class Link extends AbstractConfig
 {
-    /**
-     * Constructeur
-     * 
-     * @param Application $application
-     */
-    protected function __construct(Application $application)
-    {
-        parent::__construct($application);
-
-        $this->filename = $this->app->rootDir() . str_replace('/', DIRECTORY_SEPARATOR, "/config/link.json");
-
-        if(!$this->load()) {
-			$this->create();
-            $this->write();
-		}
-    }
+    const FILENAME = "/config/link.json";
 
     /**
-     * Crée la structure du tableau des paramètres
-     * 
-     * @param array $vars
+     * Initialisation
      * 
      * @return void
      */
-    public function create(array $vars = []): void
+    public static function init(Application $app): void
     {
-        if(!empty($vars)) {
-            $this->vars = $vars;
-        }
-        else {
-            $this->vars = array(
-                'index' => "/"
-            );
-        }
+        self::$file[static::class] = $app->rootDir() . str_replace('/', DIRECTORY_SEPARATOR, self::FILENAME);
+        !self::load();
     }
 
     /**
@@ -59,9 +36,9 @@ class Link extends AbstractConfig
      * 
      * @return void
      */
-    public function set(string $key, mixed $value): void
+    public static function set(string $key, mixed $value): void
     {
-        $this->vars[$key] = $value;
+        self::$vars[static::class][$key] = $value;
     }
 
     /**
@@ -72,13 +49,13 @@ class Link extends AbstractConfig
      * @return bool
      * Retourne true si la variable existe, sinon false
      */
-    public function exists(string $key): bool
+    public static function exists(string $key): bool
     {
-        return array_key_exists($key, $this->vars);
+        return array_key_exists($key, self::$vars[static::class]);
     }
 
     /**
-	 * Retourne la valeur d'une variable du tableau des paramètres
+	 * Retourne la valeur d'un paramètre
 	 * 
 	 * @param string $key
      * 
@@ -86,27 +63,13 @@ class Link extends AbstractConfig
      * 
      * @throws BadConfigParamExecption
 	 */
-	public function get(string $key): mixed
+	public static function get(string $key): mixed
 	{
-		if(!array_key_exists($key, $this->vars)) {
+		if(!array_key_exists($key, self::$vars[static::class])) {
             throw new BadConfigParamException("Paramètre de configuration inexistant.  [$key]");
 		}
 		
-        return $this->vars[$key];
+        return self::$vars[static::class][$key];
 	}
-
-    /**
-     * Retourne la valeur d'une variable du tableau des paramètres
-     * 
-     * @param string $name
-     * 
-     * @return mixed
-     * 
-     * @throws BadConfigParamExecption
-     */
-    public function __get(string $name): mixed
-    {
-        return $this->get($name);
-    }
 
 }

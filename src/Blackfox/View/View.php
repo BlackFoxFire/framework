@@ -11,6 +11,7 @@ namespace Blackfox\View;
 
 use Blackfox\Application;
 use Blackfox\ApplicationComponent;
+use Blackfox\Config\Link;
 
 class View extends ApplicationComponent
 {
@@ -123,7 +124,7 @@ class View extends ApplicationComponent
 		
 		$this->data['user'] = $this->app->user();
 
-		if($links = $this->app()->link()->vars()) {
+		if($links = Link::vars()) {
 			$this->setData($links);
 		}
 		
