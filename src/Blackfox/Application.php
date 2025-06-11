@@ -9,8 +9,8 @@
 
 namespace Blackfox;
 
-use Blackfox\Config\Link;
 use Blackfox\Config\Config;
+use Blackfox\Config\Link;
 use Blackfox\Config\Enums\AreaConfig;
 use Blackfox\Exceptions\InvalidRouteException;
 use Blackfox\Factories\DBFactory;
@@ -21,10 +21,6 @@ use Blackfox\User\User;
 
 abstract class Application
 {
-	/**
-	 * Propriétes
-	 */
-	
 	// Dossier racine de l'application
 	protected string $rootDir;
 	// Dossier des fichiers sources de l'application
@@ -35,8 +31,6 @@ abstract class Application
 	protected HTTPRequest $httpRequest;
 	// Objet représentant une réponce html
 	protected HTTPResponse $httpResponse;
-	// Nom de l'application
-	protected string $name;
 	// Objet représentant l'utilisateur
 	protected User $user;
 	// Factory de la base de données
@@ -45,21 +39,19 @@ abstract class Application
 	/**
 	 * Constructeur
 	 * 
-	 * @param string
+	 * @param string $rootDir
 	 * Le dossier racine de l'application
-	 * @param string
-	 * Le dossier des fichiers sources de l'application
-	 * @param string
-	 * Namespace de l'application
 	 */
-	public function __construct(string $rootDir, string $appDir, string $nameSpace)
+	public function __construct()
 	{
-		$this->rootDir = $rootDir;
-		$this->appDir = $appDir;
-		$this->nameSpace = $nameSpace;
+		$classname = get_called_class();
+		$this->rootDir = dirname($_SERVER['DOCUMENT_ROOT']);
+		$this->nameSpace = substr($classname, 0, strrpos($classname, '\\'));
+		$this->appDir = $this->rootDir . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, "/src/" . $this->nameSpace);
 		$this->httpRequest = new HTTPRequest($this);
 		$this->httpResponse = new HTTPResponse($this);
 		$this->user = new User($this);
+
 		Config::init($this);
 		Link::init($this);
 		$this->dbFactory = new DBFactory(DatabaseAPI::from(Config::get(AreaConfig::Database, 'api')),
@@ -70,14 +62,9 @@ abstract class Application
 	}
 	
 	/**
-	 * Getters
-	 */
-	
-	/**
-	 * Retourne la valeur de $rootDir
+	 * Retourne la valeur de rootDir
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function rootDir(): string
 	{
@@ -85,10 +72,9 @@ abstract class Application
 	}
 
 	/**
-	 * Retourne la valeur de $appDir
+	 * Retourne la valeur de appDir
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function appDir(): string
 	{
@@ -96,10 +82,9 @@ abstract class Application
 	}
 
 	/**
-	 * Retourne la valeur de $nameSpace
+	 * Retourne la valeur de nameSpace
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function nameSpace(): string
 	{
@@ -107,21 +92,9 @@ abstract class Application
 	}
 
 	/**
-	 * Retourne la valeur de $name
-	 * 
-	 * @return string
-	 * Retourne une chaine de caractère
-	 */
-	public function name(): string
-	{
-		return $this->name;
-	}
-
-	/**
-	 * Retourne la valeur de $httpRequest
+	 * Retourne la valeur de httpRequest
 	 * 
 	 * @return HTTPRequest
-	 * Retourne un objet Blackfox\HTTPRequest
 	 */
 	public function httpRequest(): HTTPRequest
 	{
@@ -129,10 +102,9 @@ abstract class Application
 	}
 	
 	/**
-	 * Retourne la valeur de $httpResponse
+	 * Retourne la valeur de httpResponse
 	 * 
 	 * @return HTTPResponse
-	 * Retourne un objet Blackfox\HTTPResponse
 	 */
 	public function httpResponse(): HTTPResponse
 	{
@@ -140,10 +112,9 @@ abstract class Application
 	}
 	
 	/**
-	 * Retourne la valeur de $user
+	 * Retourne la valeur de user
 	 * 
 	 * @return User
-	 * Retourne un objet Blackfox\User
 	 */
 	public function user(): User
 	{
@@ -151,10 +122,9 @@ abstract class Application
 	}
 
 	/**
-	 * Retourne la valeur de $dbFactory
+	 * Retourne la valeur de dbFactory
 	 * 
 	 * @return mixed
-	 * Peut retourner plusieurs types de données
 	 */
 	public function dbFactory(): mixed
 	{
@@ -169,7 +139,6 @@ abstract class Application
 	 * Retourne le controleur à éxécuter
 	 * 
 	 * @return BackController
-	 * Retourne un objet Blackfox\BackController
 	 */
 	public function getController(): BackController
 	{
@@ -192,7 +161,6 @@ abstract class Application
 	 * Lance l'application
 	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	abstract public function run(): void;
 	
