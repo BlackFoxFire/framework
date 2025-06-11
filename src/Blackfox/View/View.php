@@ -48,7 +48,7 @@ class View extends ApplicationComponent
 	}
 	
 	/**
-	 * Modifie la valeur $viewFile
+	 * Modifie la valeur de viewFile
 	 * 
 	 * @param string $viewFile
 	 * 
@@ -68,7 +68,7 @@ class View extends ApplicationComponent
 	/**
 	 * Ajoute une variable de template
 	 * 
-	 * @param mixed $data
+	 * @param array|string $data
 	 * 
 	 * @param mixed $value
 	 * [Optionnel]
@@ -76,10 +76,8 @@ class View extends ApplicationComponent
 	 * @return void
 	 * 
 	 * @throws ValueError
-	 * 
-	 * @throws InvalidArgumentException
 	 */
-	public function setData(mixed $data, mixed $value = null): void
+	public function setData(array|string $data, mixed $value = null): void
 	{
 		if(is_array($data)) {
 			if(empty($data)) {
@@ -88,16 +86,31 @@ class View extends ApplicationComponent
 			
 			$this->data = array_merge($this->data, $data);
 		}
-		elseif(is_string($data)) {
+		else {
 			if(empty($data)) {
 				throw new \ValueError('Le nom de la variable ne doit pas être une chaine de caractères vide');
 			}
 			
 			$this->data[$data] = $value;
 		}
-		else {
-			throw new \InvalidArgumentException('Le nom de la variable doit être une chaine de caractères valide');
+	}
+
+	/**
+	 * Ajoute une variable de template
+	 * 
+	 * @param string $name
+	 * 
+	 * @param mixed $value
+	 * 
+	 * @return void
+	 */
+	public function __set(string $name, mixed $value): void
+	{
+		if(empty($name)) {
+			throw new \ValueError('Le nom de la variable ne doit pas être une chaine de caractères vide');
 		}
+
+		$this->data[$name] = $value;
 	}
 
 	/**
