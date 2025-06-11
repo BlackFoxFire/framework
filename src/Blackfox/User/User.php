@@ -18,7 +18,6 @@ class User extends ApplicationComponent
 	 * Constructeur
 	 * 
 	 * @param Application $application
-	 * Instance de l'application
 	 */
 	public function __construct(Application $application)
 	{
@@ -36,71 +35,119 @@ class User extends ApplicationComponent
 		session_set_cookie_params($cookieParams);
 		session_start();
 	}
-
-	/**
-	 * Méthodes
-	 */
 	
 	/**
 	 * Ajoute ou modifie une variable de session
 	 * 
-	 * @param string $key
-	 * La variable à ajouter ou modifier
+	 * @param string $name
+	 * 
 	 * @param mixed $value
-	 * [Optionnel]
-	 * La valeur à affecter à la variable
+	 * 
 	 * @return void
-	 * Ne retoune aucune valeur
 	 */
-	public function set(string $key, mixed $value = ""): void
+	public function set(string $name, mixed $value): void
 	{
-		$_SESSION[$key] = $value;
+		$_SESSION[$name] = $value;
+	}
+
+	/**
+	 * Ajoute ou modifie une variable de session
+	 * 
+	 * @param string $name
+	 * 
+	 * @param mixed $value
+	 * 
+	 * @return void
+	 */
+	public function __set(string $name, mixed $value): void
+	{
+		$_SESSION[$name] = $value;
 	}
 
 	/**
 	 * Vérifie l'existence d'une variable de session
 	 * 
-	 * @param string $key
-	 * La variable à analyser
+	 * @param string $name
+	 * 
 	 * @return bool
 	 * Retourne true si la variable existe, sinon false
 	 */
-	public function exists(string $key): bool
+	public function exists(string $name): bool
 	{
-		return isset($_SESSION[$key]);
+		return isset($_SESSION[$name]);
 	}
 	
 	/**
+	 * Vérifie l'existence d'une variable de session
+	 * 
+	 * @param string $name
+	 * 
+	 * @return bool
+	 * Retourne true si la variable existe, sinon false
+	 */
+	public function __isset(string $name): bool
+	{
+		return isset($_SESSION[$name]);
+	}
+
+	/**
 	 * Retourne la valeur d'une variable de session
 	 * 
-	 * @param string $key
-	 * La variable à retouner
-	 * @param mixed $returnValue
-	 * [Optionnel]
-	 * Valeur de retour personnalisée en cas d'erreur
+	 * @param string $name
+	 * 
 	 * @return mixed
-	 * Peut retourner tout type de valeur.
 	 */
-	public function get(string $key, mixed $returnValue = null): mixed
+	public function get(string $name): mixed
 	{
-		if(isset($_SESSION[$key]))
-			return $_SESSION[$key];
+		if(isset($_SESSION[$name])) {
+			return $_SESSION[$name];
+		}
 		
-		return $returnValue;
+		return null;
+	}
+
+	/**
+	 * Retourne la valeur d'une variable de session
+	 * 
+	 * @param string $name
+	 * 
+	 * @return mixed
+	 */
+	public function __get(string $name): mixed
+	{
+		if(isset($_SESSION[$name])) {
+			return $_SESSION[$name];
+		}
+
+		return null;
 	}
 	
 	/**
 	 * Supprime une variable de session
 	 * 
-	 * @param string $key
-	 * La variable à supprimer
+	 * @param string $name
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
-	public function delete(string $key): void
+	public function unset(string $name): void
 	{
-		if(isset($_SESSION[$key]))
-			unset($_SESSION[$key]);
+		if(isset($_SESSION[$name])) {
+			unset($_SESSION[$name]);
+		}
+	}
+
+	/**
+	 * Supprime une variable de session
+	 * 
+	 * @param string $name
+	 * 
+	 * @return void
+	 */
+	public function __unset($name): void
+	{
+		if(isset($_SESSION[$name])) {
+			unset($_SESSION[$name]);
+		}
 	}
 	
 	/**
@@ -122,11 +169,10 @@ class User extends ApplicationComponent
 	 * 
 	 * @param bool $value
 	 * [Optionnel]
-	 * Si true, l'utilisateur s'est authentifié. False si c'est pas le cas.
+	 * Si true, l'utilisateur s'est authentifié. False si ce n'est pas le cas.
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws InvalidArgumentException
-	 * Lance une exception InvalidArgumentException le paramètre passé à cette méthode n'est pas un booléen
 	 */
 	public function setAuthenticated(bool $value = true): void
 	{
@@ -140,18 +186,17 @@ class User extends ApplicationComponent
 	/**
 	 * Définit un message pour l'utilisateur
 	 * 
-	 * @param string $value
-	 * Le message à l'attention de l'utilisateur
+	 * @param string $message
+	 * 
 	 * @param string bool $errorMessage
 	 * [Optionnel]
-	 * Si true, le message est un message d'erreur. False si c'est pas le cas.
+	 * Si true, le message est un message d'erreur
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
-	public function setMessage(string $value, bool $errorMessage = false): void
+	public function setMessage(string $message, bool $errorMessage = false): void
 	{
-		if(!empty($value) && is_string($value)) {
-			$_SESSION['hasMessage'] = $value;
+		if(!empty($message) && is_string($message)) {
+			$_SESSION['hasMessage'] = $message;
 			$_SESSION['errorMessage'] = $errorMessage;
 		}
 	}
@@ -160,7 +205,6 @@ class User extends ApplicationComponent
 	 * Retourne un message destiné à l'utilisateur si celui-ci existe
 	 * 
 	 * @return string
-	 * Le message à l'attention de l'utilisateur
 	 */
 	public function getMessage(): string|null
 	{
@@ -204,30 +248,10 @@ class User extends ApplicationComponent
 	 * Détruit une session utilisateur
 	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function destroy(): void
 	{
 		session_destroy();
-	}
-
-	/**
-	 * Méthode magique appellée lorque que l'on appelle une méthode qui n'existe pas.
-	 * Renvoie la valeur d'une variable de session utilisateur.
-	 * 
-	 * @param string $method
-	 * La méthode appelée
-	 * @param array $arguments
-	 * Les paralètres de la méthode
-	 * @return mixed
-	 * Peut retourner tout type de données
-	 */
-	public function __call(string $method, array $arguments): mixed
-	{
-		if(isset($_SESSION[$method]))
-			return $_SESSION[$method];
-
-		return null;
 	}
 	
 }
