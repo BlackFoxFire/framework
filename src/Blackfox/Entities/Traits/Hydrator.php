@@ -15,9 +15,8 @@ trait Hydrator
 	 * Initialise un objet
 	 * 
 	 * @param array $data
-	 * Un tableau associatif avec les nom des propriétés et leurs valeurs
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function hydrate(array $data): void
 	{

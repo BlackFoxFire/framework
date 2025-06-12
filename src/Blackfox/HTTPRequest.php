@@ -12,20 +12,11 @@ namespace Blackfox;
 class HTTPRequest extends ApplicationComponent
 {
 	/**
-	 * Méthodes
-	 */
-	
-	/**
-	 * Méthodes sur la superglobal $_GET
-	 */
-	
-	/**
 	 * Vérifie si un élément existe dans le tableau $_GET
 	 * 
 	 * @param string $key
-	 * La clé à analyser
+	 * 
 	 * @return bool
-	 * Retourne true si la clé existe dans le tableau, sinon false
 	 */
 	public function getKeyExists(string $key): bool
 	{
@@ -36,9 +27,8 @@ class HTTPRequest extends ApplicationComponent
 	 * Vérifie si un élément est vide dans $_GET
 	 * 
 	 * @param string $key
-	 * La clé à analyser
+	 * 
 	 * @return bool
-	 * Retourne true si l'élément du tableau est une chaine de caractère vide, sinon false
 	 */
 	public function getKeyEmpty(string $key): bool
 	{
@@ -49,9 +39,8 @@ class HTTPRequest extends ApplicationComponent
 	 * Retourne la valeur d'un éléments de $_GET
 	 * 
 	 * @param string $key
-	 * L'élément du tableau dont la valeur est à retourner
+	 * 
 	 * @return string|null
-	 * Retourne une chaine de caractère ou null si l'élément n'existe pas
 	 */
 	public function getFromGet(string $key): string|null
 	{
@@ -63,16 +52,11 @@ class HTTPRequest extends ApplicationComponent
 	}
 	
 	/**
-	 * Méthodes sur la superglobal $_POST
-	 */
-	
-	/**
 	 * Vérifie si un élément existe dans le tableau $_POST
 	 * 
 	 * @param string $key
-	 * La clé à analyser
+	 * 
 	 * @return bool
-	 * Retourne true si la clé existe dans le tableau, sinon false
 	 */
 	public function postKeyExists(string $key): bool
 	{
@@ -83,9 +67,8 @@ class HTTPRequest extends ApplicationComponent
 	 * Vérifie si un élément est vide dans $_POST
 	 * 
 	 * @param string $key
-	 * La clé à analyser
+	 * 
 	 * @return bool
-	 * Retourne true si l'élément du tableau est une chaine de caractère vide, sinon false
 	 */
 	public function postKeyEmpty(string $key): bool
 	{
@@ -96,9 +79,8 @@ class HTTPRequest extends ApplicationComponent
 	 * Retourne la valeur d'un éléments de $_POST
 	 * 
 	 * @param string $key
-	 * L'élément du tableau dont la valeur est à retourner
+	 * 
 	 * @return string|null
-	 * Retourne une chaine de caractère ou null si l'élément n'existe pas
 	 */
 	public function getFromPost(string $key): string|null
 	{
@@ -125,16 +107,11 @@ class HTTPRequest extends ApplicationComponent
 	}
 	
 	/**
-	 * Méthodes sur la superglobal $_COOKIE
-	 */
-	
-	/**
 	 * Vérifie si un élément existe dans le tableau $_COOKIE
 	 * 
 	 * @param string $key
-	 * La clé à analyser
+	 * 
 	 * @return bool
-	 * Retourne true si la clé existe dans le tableau, sinon false
 	 */
 	public function cookieExists(string $key): bool
 	{
@@ -145,9 +122,8 @@ class HTTPRequest extends ApplicationComponent
 	 * Retourne la valeur d'un éléments de $_COOKIE
 	 * 
 	 * @param string $key
-	 * L'élément du tableau dont la valeur est à retourner
+	 * 
 	 * @return string|null
-	 * Retourne une chaine de caractère ou null si l'élément n'existe pas
 	 */
 	public function getCookie(string $key): string|null
 	{
@@ -159,14 +135,9 @@ class HTTPRequest extends ApplicationComponent
 	}
 	
 	/**
-	 * Autres méthodes
-	 */
-	
-	/**
 	 * Retourne la valeur de l'élément REQUEST_METHOD de la super global _SERVER
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function requestMethod(): string
 	{
@@ -177,7 +148,6 @@ class HTTPRequest extends ApplicationComponent
 	 * Retourne la valeur de l'élément CONTEXT_PREFIX de la super global _SERVER
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère ou '/' si CONTEXT_PREFIX est vide
 	 */
 	public function contextPrefix(): string
 	{
@@ -188,7 +158,6 @@ class HTTPRequest extends ApplicationComponent
 	 * Retourne la valeur de l'élément REQUEST_URI de la super global _SERVER
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function requestURI(): string
 	{
@@ -199,7 +168,6 @@ class HTTPRequest extends ApplicationComponent
 	 * Retourne l'url du serveur
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function host(): string
 	{

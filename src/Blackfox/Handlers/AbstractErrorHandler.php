@@ -15,10 +15,6 @@ use Blackfox\View\View;
 
 abstract class AbstractErrorHandler extends ApplicationComponent
 {
-    /**
-	 * Propriétes
-	 */
-    
     // Instance de la classe
     protected static array $instance = [];
 
@@ -26,9 +22,8 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * Crée et/ou retourne l'instance d'une classe qui hérite de AbstractErrorHandler
      * 
      * @param Application $app
-     * Instance de l'application
+     * 
      * @return AbstractErrorHandler
-     * Retourne une instance qui hérite de AbstractErrorHandler
      */
     public static function init(Application $app): AbstractErrorHandler
     {
@@ -45,9 +40,8 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * Intercepte les exeptions lancées
      * 
      * @param \Throwable $exception
-     * Une execption qui implémentente l'interface Throwable
+     * 
      * @return void
-     * Ne retourne aucune valeur
      */
     abstract public function errorHandler(\Throwable $exception): void;
 
@@ -55,9 +49,8 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * Affiche une vue d'erreur
      * 
      * @param \Throwable $exception
-     * Un execption implémentent l'interface Throwable
+     * 
      * @return void
-	 * Ne retourne aucune valeur
      */
     protected function display(\Throwable $exception): void
     {
@@ -79,11 +72,8 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * Définit une fonction pour la gestion d'exceptions 
      * 
      * @param ?callable $callback
-     * La fonction à appeler quand une exception non attrapée se produit.
-     * Ou null pour ré-initialiser ce gestionnaire en son statut initial.
+     * 
      * @return ?callable
-     * Retourne le gestionnaire précédemment défini ou null en cas d'erreur.
-     * Si aucun gestionnaire n'a été précédemment défini, null est également retourné. 
      */
     public function setExceptionHandler(?callable $callback): ?callable
     {
@@ -97,7 +87,6 @@ abstract class AbstractErrorHandler extends ApplicationComponent
 	 * [Optionnel]
 	 * Le niveau de rapport d'erreurs
 	 * @return int
-	 * Retourne le niveau d'error_reporting, avnt qu'il ne soit changé en error_level
 	 */
 	public function errorReporting(?int $error_level = null): int
 	{
@@ -111,7 +100,6 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * [Optionnel]
 	 * Un entier, 0 pour ne pas afficher les erreurs, 1 pour les afficher
 	 * @return int
-	 * Retourne la valeur de display_errors
 	 */
 	public function displayErrors(?int $value = null): int|false
 	{
@@ -127,9 +115,8 @@ abstract class AbstractErrorHandler extends ApplicationComponent
      * Interdit l'utilisation de unserialize
      * 
      * @return void
-     * Ne retourne aucune valeur
+     * 
      * @throws \Exception
-     * Lance une exception Exception si cette méthode est appelée
      */
     final public function __wakeup(): void
     {

@@ -17,11 +17,10 @@ class EntityFactory
     /**
      * 
      * @param string $entity
-     * Le nom de l'entité à créer
+     * 
      * @param array $datas
-     * Un tableau de paramètre à passer au constructeur de l'entité
+     * 
      * @return Entity
-     * Retourne une classe qui hérite de la classe Entity
      */
     public function create(string $entity, array $datas = []): Entity
     {

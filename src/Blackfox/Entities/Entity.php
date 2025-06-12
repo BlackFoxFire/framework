@@ -16,10 +16,6 @@ abstract class Entity
 	// Utilisation du trait Hydrator
 	use Hydrator;
 	
-	/**
-	 * Propriétes
-	 */
-	
 	// Identifiant unique de l'entité
 	protected int $id;
 	// Tableau des éventuelles erreurs
@@ -40,14 +36,9 @@ abstract class Entity
 	}
 	
 	/**
-	 * Getters
-	 */
-	
-	/**
-	 * Retourne la valeur de $id
+	 * Retourne la valeur de id
 	 * 
 	 * @return int
-	 * Retourne un entier positif non null
 	 */
 	public function id(): int
 	{
@@ -55,10 +46,9 @@ abstract class Entity
 	}
 	
 	/**
-	 * Retourne la valeur de $errors
+	 * Retourne la valeur de errors
 	 * 
 	 * @return array
-	 * Retourne un tableau
 	 */
 	public function errors(): array
 	{
@@ -66,16 +56,11 @@ abstract class Entity
 	}
 	
 	/**
-	 * Setters
-	 */
-	
-	/**
-	 * Modifie la valeur de $id
+	 * Modifie la valeur de id
 	 * 
 	 * @param int $value
-	 * Identifiant unique de l'entité
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function setId(int $id): void
 	{
@@ -83,10 +68,6 @@ abstract class Entity
 			$this->id = $id;
 		}
 	}
-	
-	/**
-	 * Méthodes
-	 */
 	
 	/**
 	 * Vérifie s'il y a des erreurs dans le tableau $errors

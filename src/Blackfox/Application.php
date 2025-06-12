@@ -38,9 +38,6 @@ abstract class Application
 	
 	/**
 	 * Constructeur
-	 * 
-	 * @param string $rootDir
-	 * Le dossier racine de l'application
 	 */
 	public function __construct()
 	{
@@ -130,10 +127,6 @@ abstract class Application
 	{
 		return $this->dbFactory;
 	}
-
-	/**
-	 * Méthodes
-	 */
 
 	/**
 	 * Retourne le controleur à éxécuter

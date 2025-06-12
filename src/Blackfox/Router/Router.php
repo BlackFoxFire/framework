@@ -13,26 +13,17 @@ use Blackfox\Exceptions\InvalidRouteException;
 
 class Router
 {
-    /**
-     * Propriétés
-     */
-
     // Tableau des routes
     private static array $routes = [];
-
-    /**
-     * Méthodes
-     */
 
     /**
      * Recherche et retourne une route en fonction d'une url
      * 
      * @param string $url
-     * L'url de la route à rechercher
+     * 
      * @return Route
-     * Retourne un objet Balckfox\Route en cas de succès
+     * 
      * @throws InvalidRouteException
-     * Lance une exception InvalidRouteException si une route n'existe pas
      */
     public static function getRoute(string $url): Route
     {
@@ -62,16 +53,15 @@ class Router
      * Ajoute une route
      * 
      * @param string $url
-     * Url de la route
+     * 
      * @param string $controller
-     * Contrôlleur qu'il faudra instancier
+     * 
      * @param string $method
-     * La méthode qu'il faudra appeler
+     * 
      * @param string $vars
      * [Optionnel]
      * Variable à initialiser à partir de l'url
      * @return void
-     * Ne retourne aucune valeur
      */
     public static function set(string $url, string $controller, string $method, string $varsNames = ""): void
     {

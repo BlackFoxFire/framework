@@ -12,11 +12,7 @@ namespace Blackfox\Handlers;
 use Blackfox\Application;
 
 class ErrorHandler extends AbstractErrorHandler
-{   
-    /**
-	 * Propriétes
-	 */
-    
+{
     // Le nom du fichier de log
     private string $filename;
 
@@ -24,7 +20,6 @@ class ErrorHandler extends AbstractErrorHandler
      * Constructeur
      * 
      * @param Application $app
-     * Instance de l'application
      */
     protected function __construct(Application $app)
     {
@@ -38,9 +33,8 @@ class ErrorHandler extends AbstractErrorHandler
      * Intercepte les exeptions lancées
      * 
      * @param \Throwable $exception
-     * Une execption qui implémentente l'interface Throwable
+     * 
      * @return void
-     * Ne retourne aucune valeur
      */
     public function errorHandler(\Throwable $exception): void
     {
@@ -62,7 +56,6 @@ class ErrorHandler extends AbstractErrorHandler
      * Ecrit les erreurs détectées dans un fichier
      * 
      * @return void
-     * Ne retourne aucune valeur
      */
     protected function write(array $datas)
     {

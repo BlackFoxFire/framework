@@ -14,10 +14,6 @@ use Blackfox\Factories\Enums\DatabaseAPI;
 
 class DBFactory
 {
-    /**
-     * Propriétes
-     */
-
     // API utilisée pour l'accès à la base de données
     protected DatabaseAPI $api;
     // Nom de la base de données
@@ -33,13 +29,13 @@ class DBFactory
      * Constructeur
      * 
      * @param DatabaseAPI $api
-     * API utilisée pour l'accès à la base de données
+     * 
      * @param string $dbname
-	 * Nom de la base de données
+	 * 
 	 * @param string $username
-	 * Nom d'utilisateur pour la connexion à la base de données
+	 * 
 	 * @param string $password
-     * Mot de passe de l'utilisateur
+     * 
      */
     public function __construct(DatabaseAPI $api,string $dbname, string $username, string $password)
     {
@@ -50,14 +46,9 @@ class DBFactory
     }
 
     /**
-     * Méthodes
-     */
-
-    /**
      * Retourne l'instance de la base de données en fonction de l'api utilisée
      * 
      * @return mixed
-     * Retourne une instance de base de données ou null si une connexion est impossible
      */
     public function get(): mixed
     {

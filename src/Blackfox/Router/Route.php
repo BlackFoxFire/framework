@@ -11,10 +11,6 @@ namespace Blackfox\Router;
 
 class Route
 {
-	/**
-     * Propriétés
-     */
-	
 	// Url de la route
 	protected string $url;
 	// Contrôlleur qu'il faudra instancier
@@ -30,13 +26,12 @@ class Route
 	 * Constructeur
 	 * 
 	 * @param string $url
-	 * Url de la route
+	 * 
 	 * @param string $controller
-	 * Contrôlleur qu'il faudra instancier
+	 * 
 	 * @param string $method
-	 * La méthode qu'il faudra appeler
+	 * 
 	 * @param array $varsNames
-	 * Variable à initialiser à partir de l'url
 	 */
 	public function __construct(string $url, string $controller, string $method, array $varsNames)
 	{
@@ -47,14 +42,9 @@ class Route
 	}
 	
 	/**
-	 * Getters
-	 */
-	
-	/**
-	 * Retourne la valeur de $url
+	 * Retourne la valeur de url
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function url(): string
 	{
@@ -62,10 +52,9 @@ class Route
 	}
 	
 	/**
-	 * Retourne la valeur de $controller
+	 * Retourne la valeur de controller
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function controller(): string
 	{
@@ -73,10 +62,9 @@ class Route
 	}
 	
 	/**
-	 * Retourne la valeur de $method
+	 * Retourne la valeur de method
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function method(): string
 	{
@@ -84,10 +72,9 @@ class Route
 	}
 	
 	/**
-	 * Retourne la valeur de $varsNames
+	 * Retourne la valeur de varsNames
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function varsNames(): array
 	{
@@ -95,10 +82,9 @@ class Route
 	}
 	
 	/**
-	 * Retourne la valeur de $vars
+	 * Retourne la valeur de vars
 	 * 
 	 * @return string
-	 * Retourne une chaine de caractère
 	 */
 	public function vars(): array
 	{
@@ -106,16 +92,11 @@ class Route
 	}
 	
 	/**
-	 * Setters
-	 */
-	
-	/**
-	 * Modifie la valeur de $url
+	 * Modifie la valeur de url
 	 * 
 	 * @param string $url
-	 * Url de la route
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function setUrl(string $url): void
 	{
@@ -125,12 +106,11 @@ class Route
 	}
 	
 	/**
-	 * Modifie la valeur de $controller
+	 * Modifie la valeur de controller
 	 * 
 	 * @param string $controller
-	 * Contrôlleur qu'il faudra instancier
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function setController(string $controller): void
 	{
@@ -140,12 +120,11 @@ class Route
 	}
 	
 	/**
-	 * Modifie la valeur de $method
+	 * Modifie la valeur de method
 	 * 
 	 * @param string $method
-	 * La méthode qu'il faudra appeler
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function setMethod(string $method): void
 	{
@@ -155,12 +134,11 @@ class Route
 	}
 	
 	/**
-	 * Modifie la valeur de $varsNames
+	 * Modifie la valeur de varsNames
 	 * 
 	 * @param array $varsNames
-	 * Variable à initialiser à partir de l'url
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function setVarsNames(array $varsNames): void
 	{
@@ -168,12 +146,11 @@ class Route
 	}
 	
 	/**
-	 * Modifie la valeur de $vars
+	 * Modifie la valeur de vars
 	 * 
 	 * @param array $vars
-	 * Tableau des variables
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
 	 */
 	public function setVars(array $vars): void
 	{
@@ -181,14 +158,9 @@ class Route
 	}
 	
 	/**
-	 * Méthodes
-	 */
-	
-	/**
-	 * Vérifie si le tableau $varsNames n'est pas vide
+	 * Vérifie si le tableau varsNames n'est pas vide
 	 * 
 	 * @return bool
-	 * Retourne true si des valeurs sont présentes, sinon false
 	 */
 	public function hasVars(): bool
 	{
@@ -199,9 +171,8 @@ class Route
 	 * Retourne une route qui corespont à un masque corespond
 	 * 
 	 * @param string $url
-	 * L'url à rechercher
+	 * 
 	 * @return array|false
-	 * Retourne un tableau avec l'url en cas de succès, sinon false
 	 */
 	public function match(string $url): array|false
 	{

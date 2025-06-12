@@ -11,10 +11,6 @@ namespace Blackfox;
 
 abstract class ApplicationComponent
 {
-	/**
-	 * Propriétes
-	 */
-	
 	// Instance de l'application
 	protected Application $app;
 	
@@ -22,7 +18,6 @@ abstract class ApplicationComponent
 	 * Constructeur
 	 * 
 	 * @param Application $app
-	 * Instance de l'application
 	 */
 	public function __construct(Application $app)
 	{
@@ -30,14 +25,9 @@ abstract class ApplicationComponent
 	}
 	
 	/**
-	 * Getters
-	 */
-	
-	/**
 	 * Retourne la valeur de $app
 	 * 
 	 * @return Application 
-	 * Retourne un objet Blackfox\Application
 	 */
 	public function app(): Application
 	{

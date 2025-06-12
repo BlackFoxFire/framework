@@ -35,11 +35,10 @@ abstract class BackController extends ApplicationComponent
 	 * Constructeur
 	 * 
 	 * @param Application $app
-	 * Instance de l'application
+	 * 
 	 * @param string $controller
-	 * Contrôleur où l'on se trouve
+	 * 
 	 * @param string $method
-	 * La méthodes à appeler
 	 */
 	public function __construct(Application $app, string $controller, string $method)
 	{
@@ -53,14 +52,9 @@ abstract class BackController extends ApplicationComponent
 	}
 	
 	/**
-	 * Getters
-	 */
-	
-	/**
-	 * Retourne la valeur de $view
+	 * Retourne la valeur de view
 	 * 
 	 * @return View
-	 * Retourne un objet Blackfox\View
 	 */
 	public function view(): View
 	{
@@ -68,14 +62,13 @@ abstract class BackController extends ApplicationComponent
 	}
 	
 	/**
-	 * Modifie la valeur de $controller
+	 * Modifie la valeur de controller
 	 * 
 	 * @param string $controller
-	 * Contrôleur où le traitement se passe
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws ValueError
-	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setController(string $controller): void
 	{
@@ -87,14 +80,13 @@ abstract class BackController extends ApplicationComponent
 	}
 	
 	/**
-	 * Modifie la valeur de $method
+	 * Modifie la valeur de method
 	 * 
 	 * @param string $method
-	 * La méthodes qu'il faudra appeler
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws ValueError
-	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setMethod(string $method): void
 	{
@@ -106,14 +98,13 @@ abstract class BackController extends ApplicationComponent
 	}
 	
 	/**
-	 * Modifie la valeur de $viewFile
+	 * Modifie la valeur de viewFile
 	 * 
 	 * @param string $viewFile
-	 * Le chemin vers le fichier de la vue qu'il faudra afficher
+	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws ValueError
-	 * Lance une exception ValueError si le paramètre passé est une chaine vide
 	 */
 	public function setViewFile(string $viewFile): void
 	{
@@ -126,16 +117,11 @@ abstract class BackController extends ApplicationComponent
 	}
 	
 	/**
-	 * Méhtodes
-	 */
-	
-	/**
 	 * Exécute la méthode demandée si celle-ci existe
 	 * 
 	 * @return void
-	 * Ne retourne aucune valeur
+	 * 
 	 * @throws RuntimeException
-	 * Lance une exception RuntimeException si la méthodes à appeler n'existe pas dans le controlleur
 	 */
 	public function execute(): void
 	{

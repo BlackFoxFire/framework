@@ -20,9 +20,8 @@ class CreateProject
      * Crée les dossiers nécessaire
      * 
      * @param string $rootDir
-     * Dossier racine de l'application
+     * 
      * @return void
-     * Ne retourne aucune valeur
      */
     public static function createFolders(string $rootDir): void
     {

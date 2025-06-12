@@ -17,9 +17,8 @@ class Launcher
      * Gére l'événement post-create-project-cmd de Composer
      * 
      * @param Event $event
-     * Un événement de Composer
+     * 
      * @return void
-     * Ne retourne aucune valeur
      */
     public static function postCreateProject(Event $event): void
     {

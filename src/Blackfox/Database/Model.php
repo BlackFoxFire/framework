@@ -11,10 +11,6 @@ namespace Blackfox\Database;
 
 abstract class Model
 {
-	/**
-	 * Propriétes
-	 */
-	
 	// Lien avec la base de données
 	protected mixed $dao;
 	
@@ -22,28 +18,21 @@ abstract class Model
 	 * Constructeur
 	 * 
 	 * @param mixed $dao
-	 * le lien avec la base de données
 	 */
 	public function __construct(mixed $dao)
 	{
 		$this->dao = $dao;
-		//$this->table = $this->deductTableName();
 	}
-
-	/**
-	 * Méthodes
-	 */
 
 	/**
 	 * Exécute une requête SQL
 	 * 
 	 * @param string $sql
-	 * La requête SQL à préparer et à exécuter
+	 * 
 	 * @param array $data
 	 * [Optionnel]
 	 * Ce tableau contient une ou plusieurs paires clé=>valeur pour définir les valeurs des attributs pour l'objet PDOStatement que cette méthode retourne
 	 * @return PDOStatement|false
-	 * Si la requête est un succès, un objet PDOStatement est retourné, sinon false.
 	 */
 	public function execute(string $sql, array $data = []): \PDOStatement|false
 	{
@@ -60,9 +49,8 @@ abstract class Model
 	 * Renvoie le nombre total d'enregistrement dans une table
 	 * 
 	 * @param string $table
-	 * Le nom de la table
+	 * 
 	 * @return int
-	 * Retourne un entier qui représente le nombre total d'enregistrement dans une table
 	 */
 	public function count(string $table): int
 	{
@@ -79,7 +67,7 @@ abstract class Model
 	 * Retourne tous les enregistrements d'une table
 	 * 
 	 * @param string $table
-	 * Le nom de la table
+	 * 
 	 * @param bool $fetchClass
 	 * [Optionnel]
 	 * Si true on retourne un tableau d'objet. Sinon c'est un tableau associatif
@@ -87,7 +75,6 @@ abstract class Model
 	 * [Optionnel]
 	 * Si le paramètre $fetchClass est égal à true, $class doit contenir le nom de la classe utiliser
 	 * @return array
-	 * Retourne un tableau associatif ou un tableu d'objet
 	 */
 	public function getAll(string $table, bool $fetchClass = false, string $class = ""): array
 	{
